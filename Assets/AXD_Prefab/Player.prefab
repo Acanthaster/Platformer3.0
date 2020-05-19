@@ -11,10 +11,6 @@ GameObject:
   - component: {fileID: 3661866206367488460}
   - component: {fileID: 3661866206367488463}
   - component: {fileID: 3661866206367488467}
-  - component: {fileID: 3661866206367488464}
-  - component: {fileID: 3661866206367488465}
-  - component: {fileID: 3661866206367488462}
-  - component: {fileID: 3661866206367488469}
   - component: {fileID: 3661866206367488470}
   - component: {fileID: 3661866206367488471}
   - component: {fileID: 3661866206367488468}
@@ -86,205 +82,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &3661866206367488464
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3661866206367488461}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d99fe336e4098604e98156ecbb8b8a8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  left: 276
-  right: 275
-  jump: 32
-  changeWorld: 115
-  instantDeath: 112
-  controller: {fileID: 3661866206367488465}
---- !u!114 &3661866206367488465
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3661866206367488461}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4b777f3d9787c6245818b3f39d0a38a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 7
-  accelerationTime: 0.5
-  acceleration:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  gravity: 6
-  jumpCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0.53642946
-      tangentMode: 69
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.2546661
-      value: 1.1366104
-      inSlope: 0.53642946
-      outSlope: 0.5657305
-      tangentMode: 69
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.5378916
-      value: 1.2968397
-      inSlope: 0.5657305
-      outSlope: -407.80798
-      tangentMode: 69
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.54107356
-      value: -0.00077855587
-      inSlope: -407.80798
-      outSlope: -0.0037510754
-      tangentMode: 69
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1.3972435
-      value: -0.0039901137
-      inSlope: -0.0037510754
-      outSlope: 351.9094
-      tangentMode: 69
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1.4000955
-      value: 0.9996425
-      inSlope: 351.9094
-      outSlope: 0
-      tangentMode: 69
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  jumpReleaseMultiplier: 3
-  maxJumpsAllowed: 1
-  maxGhJumpTimeAllowed: 0.12
-  maxBffJumpTime: 2
-  wJumpCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  wJumpReleaseMultiplier: 3
-  maxStickWallAllowed: 0.4
-  slideAgainstWall: -0.12
-  wJumpHorizontalForce: 0.18
-  wJumpVerticalForce: 0.26
-  movementThreshold: 0.0015
-  self: {fileID: 3661866206367488460}
-  raycaster: {fileID: 3661866206367488462}
-  graphicsTransform: {fileID: 3661866207179204922}
-  sprite: {fileID: 3661866207179204925}
-  animator: {fileID: 0}
-  status: {fileID: 3661866206367488466}
-  dontFall: {fileID: 3661866206367488469}
-  fakeGroundLevel: {fileID: 0}
-  debugMode: 0
---- !u!114 &3661866206367488462
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3661866206367488461}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 573dd4b2f9ae53049a38cac4631ef246, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skinWidthMultiplier: 0.98
-  self: {fileID: 3661866206367488460}
-  box: {fileID: 3661866206367488463}
-  collisionEmitter: {fileID: 0}
-  playerController: {fileID: 0}
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 513
---- !u!114 &3661866206367488469
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3661866206367488461}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58cbb3a4a686af9419b6cb975ae47cdf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerIsInGround: 0
-  underRayLenght: 0.52
-  underRayPositionY: 0.96
-  underRayPositionX: 0.26
-  collisionMask:
-    serializedVersion: 2
-    m_Bits: 513
 --- !u!114 &3661866206367488470
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -309,6 +106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3ce19c8bf56e2a468efbbeb07ffcc26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  self: {fileID: 0}
   sprite: {fileID: 3661866207179204925}
   graphicsTransform: {fileID: 3661866207179204922}
   raySpacing: 0.125
@@ -356,13 +154,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cc2e2a278ae1d14aa335dfc12890864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dead: 0
   LivingWorld: 0
   LastCheckpoint: {x: 0, y: 0}
   MaxHealthPoint: 0
   HealthPoint: 0
   Corn: 0
   Cacao: 0
-  controller: {fileID: 3661866206367488465}
 --- !u!1 &3661866207179204923
 GameObject:
   m_ObjectHideFlags: 0

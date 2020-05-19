@@ -194,7 +194,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
                 float angle = Vector2.Angle(hit.normal, Vector2.up);
                 //Debug.Log("Collider : " + hit.collider + "\nLayer : " + LayerMask.LayerToName( hit.collider.gameObject.layer));
-                if (hit.collider.isTrigger && hit.collider.CompareTag("Corn") || hit.collider.CompareTag("Cacao") || hit.collider.CompareTag("Checkpoint"))
+                if (hit.collider.isTrigger && (hit.collider.CompareTag("Corn") || hit.collider.CompareTag("Cacao") || hit.collider.CompareTag("Checkpoint")))
                 {
                     if (hit.collider.CompareTag("Corn"))
                     {
@@ -282,7 +282,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
             {
                 //Debug.Log("Collider : " + hit.collider+"\nLayer : " + hit.collider.gameObject.layer);
                
-                if (hit.collider.isTrigger && hit.collider.CompareTag("Corn") || hit.collider.CompareTag("Cacao") || hit.collider.CompareTag("Checkpoint"))
+                if (hit.collider.isTrigger && (hit.collider.CompareTag("Corn") || hit.collider.CompareTag("Cacao") || hit.collider.CompareTag("Checkpoint")))
                 {
                     if (hit.collider.CompareTag("Corn"))
                     {
@@ -298,6 +298,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
                     }
                     else if (hit.collider.CompareTag("Checkpoint"))
                     {
+                        Debug.Log("Check");
                         pStatus.LastCheckpoint = hit.collider.transform.position;
                     }
 
@@ -317,7 +318,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
                     pStatus.TakeDamage();
                 }
 
-                    if (hit.collider.transform.tag == "MovingPlatform" && !isOnMovingPlatform)
+                if (hit.collider.transform.tag == "MovingPlatform" && !isOnMovingPlatform)
                 {
                     transform.parent = hit.collider.transform;
                     ColliderDistance2D dist = myCollider.Distance(hit.collider);
@@ -325,14 +326,11 @@ public class ALR_CustomCharacterController : MonoBehaviour
                     isOnMovingPlatform = true;
                     deltaMove.y = 0;
                 } 
-                
                 else
                 {
                     deltaMove.y = (hit.distance - skinWidth) * dirY;
                     rayLength = hit.distance;
                 }
-              
-
                 collisions.above = dirY > 0;
                 collisions.below = dirY < 0;
                 collisions.vHit = hit;
@@ -517,17 +515,25 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
             if (hit) 
             {
-                collisions.onGround = true;
-                collisions.onWall = false;
+                if (hit.collider.isTrigger && hit.collider.CompareTag("Checkpoint"))
+                {
+                    Debug.Log("Check ground");
+                    pStatus.LastCheckpoint = hit.collider.transform.position;
+                }
+                else
+                {
+                    collisions.onGround = true;
+                    collisions.onWall = false;
 
-                collisions.groundAngle = Vector2.Angle(hit.normal, Vector2.up);
-                collisions.groundDirection = Mathf.Sign(hit.normal.x);
-                collisions.groundLayer = hit.collider.gameObject.layer;
-                collisions.vHit = hit;
-                collisions.below = true;
+                    collisions.groundAngle = Vector2.Angle(hit.normal, Vector2.up);
+                    collisions.groundDirection = Mathf.Sign(hit.normal.x);
+                    collisions.groundLayer = hit.collider.gameObject.layer;
+                    collisions.vHit = hit;
+                    collisions.below = true;
 
-                Debug.DrawRay(rayOrigin, Vector2.down * skinWidth * 2, Color.magenta);
-                break;
+                    Debug.DrawRay(rayOrigin, Vector2.down * skinWidth * 2, Color.magenta);
+                    break;
+                }
 
             }
         }

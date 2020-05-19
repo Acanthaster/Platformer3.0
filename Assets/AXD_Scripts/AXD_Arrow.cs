@@ -54,7 +54,6 @@ public class AXD_Arrow : MonoBehaviour
 
         if (hit)
         {
-            Debug.Log("Arrow Layer : " + LayerMask.LayerToName(hit.collider.gameObject.layer));
             if (LayerMask.LayerToName(hit.collider.gameObject.layer).Equals("TempleGround"))
             {
                 Debug.Log("Mur");
