@@ -11,10 +11,12 @@ public class ALR_PlayerInputHandler : MonoBehaviour
 	private ALR_CustomCharacterController charac;
     private ALR_CharacterData cData;
     private AXD_PlayerStatus pStatus;
+    public ALR_DialogueTrigger dTrigger;
 
     bool checkingOnAir = false;
     bool isbufferedJumping = false;
     bool isGhostJumping = false;
+    public bool talkingToNPC = false;
     
 
     float timeSinceJumpInput;
@@ -100,9 +102,13 @@ public class ALR_PlayerInputHandler : MonoBehaviour
                 timeCheckGhostJump = 0;
         }
 
+        if (Input.GetKeyDown("joystick button 0") && talkingToNPC == true)
+        {
+            dTrigger.TriggerDialogue();
+            Debug.Log("Wesh");
+        }
 
-
-        if (Input.GetKeyDown("joystick button 0"))
+            if (Input.GetKeyDown("joystick button 0") && talkingToNPC == false)
         {
             //Debug.Log("INPUT JUMP !");
             charac.Jump();

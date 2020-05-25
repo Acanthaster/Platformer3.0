@@ -63,6 +63,8 @@ public class ALR_CustomCharacterController : MonoBehaviour
     protected ALR_PhysicsConfig pConfig; //S'occupe de gérer les layers de collisions et les paramètres de base de la physique
     private ALR_CharacterData cData; // Configuration des paramètres du personnage et de ses actions
     private AXD_PlayerStatus pStatus;
+    private ALR_PlayerInputHandler pInput;
+    //private ALR_DialogueTrigger dTrigger;
  
 
         //COLLISION
@@ -124,6 +126,8 @@ public class ALR_CustomCharacterController : MonoBehaviour
         cData = GetComponent<ALR_CharacterData>();
         myCollider = GetComponent<BoxCollider2D>();
         pConfig = GameObject.FindObjectOfType<ALR_PhysicsConfig>();
+        pInput = GetComponent<ALR_PlayerInputHandler>();
+        //dTrigger = GetComponent
 
         collisionMask = pConfig.characterCollisionMask;
 
@@ -160,6 +164,8 @@ public class ALR_CustomCharacterController : MonoBehaviour
             UpdateRaycastOrigins();
             CheckOnWall();
         }
+
+        CheckNPC();
     }
 
 
@@ -505,7 +511,6 @@ public class ALR_CustomCharacterController : MonoBehaviour
     {
         for (int i = 0; i < vertiRayCount; i++) 
         {
-               //Pourquoi on commence par bottomLeft ?? ça me semble plus logique de commencer par bottomRight.....
             Vector2 rayOrigin = dir == 1 ? raycastOrigins.bottomLeft : raycastOrigins.bottomRight;
             rayOrigin += (dir == 1 ? Vector2.right : Vector2.left) * (vertiRaySpacing * i);
             rayOrigin.y += skinWidth * 2;
@@ -674,6 +679,30 @@ public class ALR_CustomCharacterController : MonoBehaviour
             speed.y = 0;
         }
      }
+
+    public void CheckNPC()
+    {
+        float rayLenght = 3f;
+
+
+        Vector2 direction = FacingRight ? Vector2.right : Vector2.left;
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, rayLenght, collisionMask);
+        Debug.DrawRay(transform.position, direction * rayLenght, Color.white);
+
+        if (hit.collider.CompareTag("NPC"))
+        {
+            pInput.talkingToNPC = true;
+            pInput.dTrigger = hit.transform.gameObject.GetComponent<ALR_DialogueTrigger>();
+            Debug.Log("Ola ! ");
+        }
+        else
+        {
+            pInput.talkingToNPC = false;
+        }
+
+
+    }
 
     // Calcule du nombre et de la taille des raycasts pour faire la "grille" en fonction de la BoxCollider du player 
     void CalculateSpacing() 
