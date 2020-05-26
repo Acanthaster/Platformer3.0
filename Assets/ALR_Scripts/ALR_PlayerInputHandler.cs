@@ -12,12 +12,15 @@ public class ALR_PlayerInputHandler : MonoBehaviour
     private ALR_CharacterData cData;
     private AXD_PlayerStatus pStatus;
     public ALR_DialogueTrigger dTrigger;
+    public ALR_DialogueManager dManager; 
 
     bool checkingOnAir = false;
     bool isbufferedJumping = false;
     bool isGhostJumping = false;
     public bool talkingToNPC = false;
-    
+    public bool isAlreadyTalking = false;
+    public bool endingDialogue = false;
+    private bool dialJustEnded = false;
 
     float timeSinceJumpInput;
     float timeCheckGhostJump;
@@ -102,34 +105,58 @@ public class ALR_PlayerInputHandler : MonoBehaviour
                 timeCheckGhostJump = 0;
         }
 
-        if (Input.GetKeyDown("joystick button 0") && talkingToNPC == true)
+
+        if (endingDialogue)
         {
+            isAlreadyTalking = false;
+            talkingToNPC = false;
+            endingDialogue = false;
+            dialJustEnded = true;
+        } 
+
+        if(Input.GetKeyDown("joystick button 0") && talkingToNPC == false) 
+        {
+            if(dialJustEnded == true)
+            {
+                dialJustEnded = false;
+            } 
+            else 
+            {
+
+                //Debug.Log("INPUT JUMP !");
+                charac.Jump();
+
+                if (checkingOnAir == false && charac.collisions.onGround)
+                {
+                    checkingOnAir = true;
+                }
+
+                if (!charac.collisions.onGround && isbufferedJumping == false)
+                {
+                    checkingOnAir = false;
+                    isbufferedJumping = true;
+                }
+
+                if (isbufferedJumping && !charac.collisions.onGround)
+                {
+                    timeSinceJumpInput = 0f;
+
+                }
+
+            }
+         
+
+        }
+        
+
+        if (Input.GetKeyDown("joystick button 0") && talkingToNPC == true && isAlreadyTalking == false)
+        {
+            isAlreadyTalking = true;
             dTrigger.TriggerDialogue();
             Debug.Log("Wesh");
         }
 
-            if (Input.GetKeyDown("joystick button 0") && talkingToNPC == false)
-        {
-            //Debug.Log("INPUT JUMP !");
-            charac.Jump();
-
-           if(checkingOnAir == false && charac.collisions.onGround)
-            { 
-                checkingOnAir = true;
-            }
-
-           if(!charac.collisions.onGround && isbufferedJumping == false)
-            {
-                checkingOnAir = false;
-                isbufferedJumping = true;
-            }
-
-            if (isbufferedJumping && !charac.collisions.onGround)
-            {
-                timeSinceJumpInput = 0f;
-               
-            }
-        }
+      
 
         if (Input.GetKeyUp("joystick button 0")) 
         {

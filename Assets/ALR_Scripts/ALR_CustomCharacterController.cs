@@ -236,6 +236,9 @@ public class ALR_CustomCharacterController : MonoBehaviour
                     pStatus.TakeDamage();
                 }
 
+                if (hit.collider.CompareTag("NPC"))
+                    return;
+
                 if (!(i == 100000)) 
                 {
                   
@@ -323,6 +326,9 @@ public class ALR_CustomCharacterController : MonoBehaviour
                     Debug.Log("Pas Fire rain");
                     pStatus.TakeDamage();
                 }
+
+                if (hit.collider.CompareTag("NPC"))
+                    return;
 
                 if (hit.collider.transform.tag == "MovingPlatform" && !isOnMovingPlatform)
                 {
@@ -682,7 +688,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
     public void CheckNPC()
     {
-        float rayLenght = 3f;
+        float rayLenght = 2f;
 
 
         Vector2 direction = FacingRight ? Vector2.right : Vector2.left;

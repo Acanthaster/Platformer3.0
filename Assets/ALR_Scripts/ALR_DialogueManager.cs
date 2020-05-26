@@ -7,10 +7,10 @@ public class ALR_DialogueManager : MonoBehaviour
 {
 
     [SerializeField] private GameObject dialogueUI;
-    public Text nameText;
+    //public Text nameText;
     public Text dialogueText;
     private Queue<string> sentences;
-
+    public ALR_PlayerInputHandler pInput;
     
 
 
@@ -21,22 +21,11 @@ public class ALR_DialogueManager : MonoBehaviour
     }
 
 
-    /*private void Update()
-    {
-        if (Input.GetButtonDown("Start Dialogue"))
-        {
-            StartDialogue(dialogue);
-        }
-
-    }*/
-
-
-
     public void StartDialogue (ALR_Dialogue dialogue)
     {
-        Time.timeScale = 0;
         dialogueUI.SetActive(true);
-        nameText.text = dialogue.name;
+        //nameText.text = dialogue.name;
+        
 
         sentences.Clear();
 
@@ -74,8 +63,8 @@ public class ALR_DialogueManager : MonoBehaviour
 
     public void EndDialogue()
     {
-        Time.timeScale = 1;
         dialogueUI.SetActive(false);
+        FindObjectOfType<ALR_PlayerInputHandler>().endingDialogue = true;
         Debug.Log("End of the Conversation");
     }
 
