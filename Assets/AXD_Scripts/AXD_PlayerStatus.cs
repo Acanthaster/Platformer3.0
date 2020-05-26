@@ -7,6 +7,7 @@ public class AXD_PlayerStatus : MonoBehaviour
     float invincible;
     float invincibilityCoolDown;
     public bool dead;
+    public int deaths;
     [Header("World")]
     public bool LivingWorld;
     public Vector2 LastCheckpoint;
@@ -21,6 +22,7 @@ public class AXD_PlayerStatus : MonoBehaviour
 
     private void Awake()
     {
+        deaths = 0;
         dead = false;
         LastCheckpoint = this.transform.position;
         invincibilityCoolDown = 1f;
@@ -37,15 +39,16 @@ public class AXD_PlayerStatus : MonoBehaviour
         {
             this.transform.position = LastCheckpoint;
             HealthPoint = MaxHealthPoint;
+            deaths++;
             dead = true;
         }
+        Debug.Log("Seconds : " + (AXD_TimeManager.GetSeconds()));
     }
 
     public void TakeDamage()
     {
         if (Time.time > invincible)
         {
-            Debug.Log("Damage !");
             HealthPoint--;
             invincible = Time.time + invincibilityCoolDown;
         }
