@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 [RequireComponent(typeof(ALR_CustomCharacterController))] 
@@ -12,7 +13,8 @@ public class ALR_PlayerInputHandler : MonoBehaviour
     private ALR_CharacterData cData;
     private AXD_PlayerStatus pStatus;
     public ALR_DialogueTrigger dTrigger;
-    public ALR_DialogueManager dManager; 
+    public ALR_DialogueManager dManager;
+    public AXD_ScoreManager sManager;
 
     bool checkingOnAir = false;
     bool isbufferedJumping = false;
@@ -30,6 +32,7 @@ public class ALR_PlayerInputHandler : MonoBehaviour
         pStatus = GetComponent<AXD_PlayerStatus>();
         charac = GetComponent<ALR_CustomCharacterController>();
         cData = GetComponent<ALR_CharacterData>();
+        sManager = FindObjectOfType<AXD_ScoreManager>();
     }
 
   
@@ -174,6 +177,17 @@ public class ALR_PlayerInputHandler : MonoBehaviour
         if (Input.GetButtonDown("World Switch"))
         {
             pStatus.ChangeWorld();
+        }
+
+        // Charge l'écran du score après la fin du niveau. MODE DEBUG pour l'input !
+
+        if (Input.GetKey("o"))
+        {
+
+            PlayerPrefs.SetInt("nbCorn", pStatus.Corn);
+            PlayerPrefs.SetInt("valueCorn", sManager.cornValue);
+
+            SceneManager.LoadScene("Menu_Score");
         }
     }
 }

@@ -703,7 +703,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, rayLenght, collisionMask);
         Debug.DrawRay(transform.position, direction * rayLenght, Color.white);
 
-        if (hit.collider.CompareTag("NPC"))
+        if (hit.collider!=null && hit.collider.CompareTag("NPC"))
         {
             pInput.talkingToNPC = true;
             pInput.dTrigger = hit.transform.gameObject.GetComponent<ALR_DialogueTrigger>();

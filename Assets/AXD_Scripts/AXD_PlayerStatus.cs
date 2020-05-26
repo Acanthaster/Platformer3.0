@@ -42,7 +42,7 @@ public class AXD_PlayerStatus : MonoBehaviour
             deaths++;
             dead = true;
         }
-        Debug.Log("Seconds : " + (AXD_TimeManager.GetSeconds()));
+        //Debug.Log("Seconds : " + (AXD_TimeManager.GetSeconds()));
     }
 
     public void TakeDamage()
