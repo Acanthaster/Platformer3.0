@@ -94,6 +94,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
     private bool isOnMovingPlatform = false; 
     private bool replaceOnMovingPlatform = false;
     public bool isGhostJumping = false;
+    public bool jumped = false;
     public bool IgnoreFriction { get; set; } // CHECK NEEDED !!
     public bool Immobile { get; set; } // CHECK NEEDED !!
     
@@ -280,8 +281,10 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
             if (hit) 
             {
-                //Debug.Log("Collider : " + hit.collider+"\nLayer : " + hit.collider.gameObject.layer);
-               
+                if (TotalSpeed.y < 0)
+                {
+                    jumped = false;
+                }
                 if (hit.collider.isTrigger && (hit.collider.CompareTag("Corn") || hit.collider.CompareTag("Cacao") || hit.collider.CompareTag("Checkpoint")))
                 {
                     if (hit.collider.CompareTag("Corn"))
@@ -479,6 +482,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
                 // WALL JUMP
                 if (cData.canWallJump && collisions.onWall && !collisions.below) 
                 {
+                    Debug.Log("Wall Jump");
                     externalForce.x += collisions.left ? cData.wallJumpSpeed : -cData.wallJumpSpeed;
                     collisions.onWall = false;
                 }
@@ -515,9 +519,12 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
             if (hit) 
             {
+                if (TotalSpeed.y < 0)
+                {
+                    jumped = false;
+                }
                 if (hit.collider.isTrigger && hit.collider.CompareTag("Checkpoint"))
                 {
-                    Debug.Log("Check ground");
                     pStatus.LastCheckpoint = hit.collider.transform.position;
                 }
                 else

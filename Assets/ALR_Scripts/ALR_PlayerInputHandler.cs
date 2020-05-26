@@ -61,7 +61,7 @@ public class ALR_PlayerInputHandler : MonoBehaviour
             if(charac.collisions.onGround == true && timeSinceJumpInput <= cData.maxBufferedJump)
             {
                 charac.Jump();
-
+                charac.jumped = true;
                 timeSinceJumpInput = 0f;
                 isbufferedJumping = false;
                 //Debug.Log("Buffered Jump !");
@@ -83,12 +83,12 @@ public class ALR_PlayerInputHandler : MonoBehaviour
             timeCheckGhostJump += Time.fixedDeltaTime;
            
 
-            if (timeCheckGhostJump <= cData.maxGhostJump && charac.externalForce.y < 0)
+            if (timeCheckGhostJump <= cData.maxGhostJump && !charac.jumped)
             {
                 charac.isGhostJumping = true;
             } 
             
-            else if (timeCheckGhostJump > cData.maxGhostJump)
+            else
             {
                 charac.isGhostJumping = false;
             }
@@ -106,6 +106,7 @@ public class ALR_PlayerInputHandler : MonoBehaviour
         {
             //Debug.Log("INPUT JUMP !");
             charac.Jump();
+            charac.jumped = true;
 
            if(checkingOnAir == false && charac.collisions.onGround)
             { 
