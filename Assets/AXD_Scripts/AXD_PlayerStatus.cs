@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class AXD_PlayerStatus : MonoBehaviour
 {
+    public Camera mainCamera;
     float invincible;
     float invincibilityCoolDown;
     public bool dead;
@@ -25,6 +26,7 @@ public class AXD_PlayerStatus : MonoBehaviour
         deaths = 0;
         dead = false;
         LastCheckpoint = this.transform.position;
+        mainCamera.transform.position = transform.position;
         invincibilityCoolDown = 1f;
         invincible = Time.deltaTime;
         LivingWorld = true;
@@ -37,12 +39,14 @@ public class AXD_PlayerStatus : MonoBehaviour
     {
         if (HealthPoint <= 0)
         {
+            mainCamera.gameObject.transform.GetChild(0).gameObject.SetActive(false);
             this.transform.position = LastCheckpoint;
+            mainCamera.transform.position = LastCheckpoint;
+            mainCamera.gameObject.transform.GetChild(0).gameObject.SetActive(true);
             HealthPoint = MaxHealthPoint;
             deaths++;
             dead = true;
         }
-        Debug.Log("Seconds : " + (AXD_TimeManager.GetSeconds()));
     }
 
     public void TakeDamage()
@@ -59,4 +63,8 @@ public class AXD_PlayerStatus : MonoBehaviour
         LivingWorld = !LivingWorld;
     }
     
+    public void Die()
+    {
+        HealthPoint = 0;
+    }
 }

@@ -318,7 +318,6 @@ public class ALR_CustomCharacterController : MonoBehaviour
                 }
                 else if (LayerMask.LayerToName(hit.collider.gameObject.layer).Equals("Obstacles") && hit.collider.CompareTag("FireRain"))
                 {
-                    Debug.Log("Fire rain");
                     if (hit.collider.gameObject.GetComponent<AXD_FireRain>().damaging)
                     {
                         pStatus.TakeDamage();
@@ -326,8 +325,10 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
                 } else if (LayerMask.LayerToName(hit.collider.gameObject.layer).Equals("Obstacles") && !hit.collider.CompareTag("FireRain"))
                 {
-                    Debug.Log("Pas Fire rain");
                     pStatus.TakeDamage();
+                }else if (LayerMask.LayerToName(hit.collider.gameObject.layer).Equals("Death"))
+                {
+                    pStatus.Die();
                 }
 
                 if (hit.collider.CompareTag("NPC"))
