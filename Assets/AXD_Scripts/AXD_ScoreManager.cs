@@ -32,19 +32,44 @@ public class AXD_ScoreManager : MonoBehaviour
 
     public void CalculateScore()
     {
-        score += pStatus.Corn * cornValue + pStatus.Cacao * cacaoValue;
+        score = GetCornScore();
+        score += GetCacaoScore();
+        score += GetTimeBonusScore();
+        score += GetDeathMalus();
+    }
+
+    public int GetCornScore()
+    {
+        return pStatus.Corn * cornValue;
+    }
+
+    public int GetCacaoScore()
+    {
+        return pStatus.Cacao * cacaoValue;
+    }
+
+    public int GetTimeBonusScore()
+    {
+        int bonus = 0;
         int i = 0;
-        while(i < levels.Count || i != -1)
+        while (i < levels.Count && i != -1)
         {
-            if(AXD_TimeManager.GetSeconds() < levels[i])
+            if (AXD_TimeManager.GetSeconds() < levels[i])
             {
-                score += levelsValue[i];
+                bonus = levelsValue[i];
                 i = -2;
             }
             i++;
         }
-        score -= deathValue * pStatus.deaths;
+
+        return bonus;
     }
+
+    public int GetDeathMalus()
+    {
+        return -deathValue * pStatus.deaths;
+    }
+
 
     public static int GetScore()
     {

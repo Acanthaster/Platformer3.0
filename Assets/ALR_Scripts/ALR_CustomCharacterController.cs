@@ -300,6 +300,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
             if (hit) 
             {
+                Debug.Log("Collider Layer : " + LayerMask.LayerToName(hit.collider.gameObject.layer));
                 if (TotalSpeed.y < 0)
                 {
                     jumped = false;
@@ -336,8 +337,10 @@ public class ALR_CustomCharacterController : MonoBehaviour
                 } else if (LayerMask.LayerToName(hit.collider.gameObject.layer).Equals("Obstacles") && !hit.collider.CompareTag("FireRain"))
                 {
                     pStatus.TakeDamage();
+
                 }else if (LayerMask.LayerToName(hit.collider.gameObject.layer).Equals("Death"))
                 {
+                    Debug.Log("Death");
                     pStatus.Die();
                 }
 
@@ -541,6 +544,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
             if (hit) 
             {
+                Debug.Log("Check ground Collider Layer : " + LayerMask.LayerToName(hit.collider.gameObject.layer));
                 if (TotalSpeed.y < 0)
                 {
                     jumped = false;
@@ -548,8 +552,12 @@ public class ALR_CustomCharacterController : MonoBehaviour
                 if (hit.collider.isTrigger && hit.collider.CompareTag("Checkpoint"))
                 {
                     pStatus.LastCheckpoint = hit.collider.transform.position;
+                }else if (LayerMask.LayerToName(hit.collider.gameObject.layer).Equals("Death"))
+                {
+                    Debug.Log("Death");
+                    pStatus.Die();
                 }
-                
+
                 else if (!hit.collider.CompareTag("NPC") && !hit.collider.CompareTag("FireRain"))
                 {
                     collisions.onGround = true;
