@@ -33,6 +33,7 @@ public class ALR_PlayerInputHandler : MonoBehaviour
         charac = GetComponent<ALR_CustomCharacterController>();
         cData = GetComponent<ALR_CharacterData>();
         sManager = FindObjectOfType<AXD_ScoreManager>();
+
     }
 
   
@@ -186,6 +187,19 @@ public class ALR_PlayerInputHandler : MonoBehaviour
 
             PlayerPrefs.SetInt("nbCorn", pStatus.Corn);
             PlayerPrefs.SetInt("valueCorn", sManager.cornValue);
+
+            PlayerPrefs.SetInt("nbCacao", pStatus.Cacao);
+            PlayerPrefs.SetInt("valueCacao", sManager.cacaoValue);
+
+            PlayerPrefs.SetInt("nbDeath", pStatus.deaths);
+            PlayerPrefs.SetInt("valueDeath", sManager.deathValue);
+
+            var sec = AXD_TimeManager.GetSeconds();
+            PlayerPrefs.SetInt("seconds", sec);
+
+            var score = AXD_ScoreManager.GetScore();
+            PlayerPrefs.SetInt("score", score);
+
 
             SceneManager.LoadScene("Menu_Score");
         }

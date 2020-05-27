@@ -116,7 +116,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
     private static readonly string ANIMATION_WALL = "OnWall";
     private static readonly string ANIMATION_FACING = "facingRight";
     private static readonly string ANIMATION_H_MOVING = "hMoving";
-    //private static readonly string ANIMATION_DAMAGE = "damage";
+    private static readonly string ANIMATION_DAMAGE = "damage";
 
     public bool FacingRight = true;
 
@@ -230,7 +230,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
                     {
                         pStatus.TakeDamage();
 
-                        //animator.SetTrigger(ANIMATION_DAMAGE);
+                        animator.SetTrigger(ANIMATION_DAMAGE);
                     }
                     else
                     {
@@ -244,7 +244,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
                     Debug.Log("Pas Fire rain");
                     pStatus.TakeDamage();
 
-                    //animator.SetTrigger(ANIMATION_DAMAGE);
+                    animator.SetTrigger(ANIMATION_DAMAGE);
                 }
 
                 if (hit.collider.CompareTag("NPC"))
@@ -332,13 +332,17 @@ public class ALR_CustomCharacterController : MonoBehaviour
                     if (hit.collider.gameObject.GetComponent<AXD_FireRain>().damaging)
                     {
                         pStatus.TakeDamage();
+                        animator.SetTrigger(ANIMATION_DAMAGE);
                     }
 
                 } else if (LayerMask.LayerToName(hit.collider.gameObject.layer).Equals("Obstacles") && !hit.collider.CompareTag("FireRain"))
                 {
                     pStatus.TakeDamage();
 
-                }else if (LayerMask.LayerToName(hit.collider.gameObject.layer).Equals("Death"))
+                    animator.SetTrigger(ANIMATION_DAMAGE);
+
+                }
+                else if (LayerMask.LayerToName(hit.collider.gameObject.layer).Equals("Death"))
                 {
                     Debug.Log("Death");
                     pStatus.Die();
