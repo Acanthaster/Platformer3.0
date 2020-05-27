@@ -5,6 +5,8 @@ using UnityEngine;
 public class ALR_CustomCharacterController : MonoBehaviour
 {
     public GameObject self;
+    public GameObject interactionNPC;
+    public GameObject interactionNPC1;
 
     // Stock temporairement les points d'origine des Raycasts.
     protected struct RaycastOrigins 
@@ -117,6 +119,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
     private static readonly string ANIMATION_FACING = "facingRight";
     private static readonly string ANIMATION_H_MOVING = "hMoving";
     private static readonly string ANIMATION_DAMAGE = "damage";
+    private static readonly string ANIMATION_DEATH = "death";
 
     public bool FacingRight = true;
 
@@ -129,7 +132,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
         myCollider = GetComponent<BoxCollider2D>();
         pConfig = GameObject.FindObjectOfType<ALR_PhysicsConfig>();
         pInput = GetComponent<ALR_PlayerInputHandler>();
-        //dTrigger = GetComponent
+
 
         collisionMask = pConfig.characterCollisionMask;
 
@@ -346,6 +349,8 @@ public class ALR_CustomCharacterController : MonoBehaviour
                 {
                     Debug.Log("Death");
                     pStatus.Die();
+
+                    animator.SetTrigger(ANIMATION_DEATH);
                 }
 
                 if (hit.collider.CompareTag("NPC"))
@@ -560,6 +565,8 @@ public class ALR_CustomCharacterController : MonoBehaviour
                 {
                     Debug.Log("Death");
                     pStatus.Die();
+
+                    animator.SetTrigger(ANIMATION_DEATH);
                 }
 
                 else if (!hit.collider.CompareTag("NPC") && !hit.collider.CompareTag("FireRain"))
@@ -721,7 +728,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
     public void CheckNPC()
     {
-        float rayLenght = 2f;
+        float rayLenght = 1f;
 
 
         Vector2 direction = FacingRight ? Vector2.right : Vector2.left;
@@ -733,11 +740,17 @@ public class ALR_CustomCharacterController : MonoBehaviour
         {
             pInput.talkingToNPC = true;
             pInput.dTrigger = hit.transform.gameObject.GetComponent<ALR_DialogueTrigger>();
+
+            interactionNPC.SetActive(true);
+            interactionNPC1.SetActive(true);
             Debug.Log("Ola ! ");
         }
         else
         {
             pInput.talkingToNPC = false;
+
+            interactionNPC.SetActive(false);
+            interactionNPC1.SetActive(false);
         }
 
 
