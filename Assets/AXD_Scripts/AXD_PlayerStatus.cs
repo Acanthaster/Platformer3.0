@@ -9,6 +9,7 @@ public class AXD_PlayerStatus : MonoBehaviour
     float invincibilityCoolDown;
     public bool dead;
     public int deaths;
+
     [Header("World")]
     public bool LivingWorld;
     public Vector2 LastCheckpoint;

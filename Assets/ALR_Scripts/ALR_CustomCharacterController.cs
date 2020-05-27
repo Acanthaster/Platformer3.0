@@ -116,7 +116,8 @@ public class ALR_CustomCharacterController : MonoBehaviour
     private static readonly string ANIMATION_WALL = "OnWall";
     private static readonly string ANIMATION_FACING = "facingRight";
     private static readonly string ANIMATION_H_MOVING = "hMoving";
-    
+    private static readonly string ANIMATION_DAMAGE = "damage";
+
     public bool FacingRight = true;
 
    
@@ -228,13 +229,22 @@ public class ALR_CustomCharacterController : MonoBehaviour
                     if (hit.collider.gameObject.GetComponent<AXD_FireRain>().damaging)
                     {
                         pStatus.TakeDamage();
+
+                        animator.SetTrigger(ANIMATION_DAMAGE);
                     }
+                    else
+                    {
+                        return;
+                    }
+                        
 
                 }
                 else if (LayerMask.LayerToName(hit.collider.gameObject.layer).Equals("Obstacles") && !hit.collider.CompareTag("FireRain"))
                 {
                     Debug.Log("Pas Fire rain");
                     pStatus.TakeDamage();
+
+                    animator.SetTrigger(ANIMATION_DAMAGE);
                 }
 
                 if (hit.collider.CompareTag("NPC"))
@@ -539,7 +549,8 @@ public class ALR_CustomCharacterController : MonoBehaviour
                 {
                     pStatus.LastCheckpoint = hit.collider.transform.position;
                 }
-                else
+                
+                else if (!hit.collider.CompareTag("NPC") && !hit.collider.CompareTag("FireRain"))
                 {
                     collisions.onGround = true;
                     collisions.onWall = false;
@@ -552,7 +563,9 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
                     Debug.DrawRay(rayOrigin, Vector2.down * skinWidth * 2, Color.magenta);
                     break;
-                }    
+                }   
+                
+                
 
             }
         }
