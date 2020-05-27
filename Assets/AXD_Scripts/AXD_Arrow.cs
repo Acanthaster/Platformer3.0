@@ -11,10 +11,12 @@ public class AXD_Arrow : MonoBehaviour
     private Directions dir;
     public RaycastHit2D hit;
     private Vector2 vDir;
+    private LayerMask layersToDetect;
     // Start is called before the first frame update
     void Awake()
     {
         sr = GetComponent<SpriteRenderer>();
+        layersToDetect = LayerMask.GetMask("TempleGround", "Player");
     }
 
     // Update is called once per frame
@@ -24,7 +26,7 @@ public class AXD_Arrow : MonoBehaviour
         if (dir == Directions.up)
         {
             hit = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + (sr.sprite.rect.height / 2 / sr.sprite.pixelsPerUnit) - detectionDistance / 2 / sr.sprite.pixelsPerUnit),
-            Vector2.up * detectionDistance / sr.sprite.pixelsPerUnit, detectionDistance / sr.sprite.pixelsPerUnit);
+            Vector2.up * detectionDistance / sr.sprite.pixelsPerUnit, detectionDistance / sr.sprite.pixelsPerUnit, layersToDetect);
             Debug.DrawRay(new Vector2(transform.position.x, transform.position.y + (sr.sprite.rect.height / 2 / sr.sprite.pixelsPerUnit) - detectionDistance / 2 / sr.sprite.pixelsPerUnit),
                 Vector2.up * detectionDistance / sr.sprite.pixelsPerUnit, Color.blue);
 
@@ -32,14 +34,14 @@ public class AXD_Arrow : MonoBehaviour
         else if (dir == Directions.right)
         {
             hit = Physics2D.Raycast(new Vector2(transform.position.x + (sr.sprite.rect.width / 2 / sr.sprite.pixelsPerUnit) - detectionDistance / 2 / sr.sprite.pixelsPerUnit, transform.position.y),
-            Vector2.right * detectionDistance / sr.sprite.pixelsPerUnit, detectionDistance / sr.sprite.pixelsPerUnit);
+            Vector2.right * detectionDistance / sr.sprite.pixelsPerUnit, detectionDistance / sr.sprite.pixelsPerUnit, layersToDetect);
             Debug.DrawRay(new Vector2(transform.position.x + (sr.sprite.rect.width / 2 / sr.sprite.pixelsPerUnit) - detectionDistance / 2 / sr.sprite.pixelsPerUnit, transform.position.y),
                 Vector2.right * detectionDistance / sr.sprite.pixelsPerUnit, Color.blue);
         }
         else if (dir == Directions.down)
         {
             hit = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y - (sr.sprite.rect.height / 2 / sr.sprite.pixelsPerUnit) + detectionDistance / 2 / sr.sprite.pixelsPerUnit),
-            Vector2.down * detectionDistance / sr.sprite.pixelsPerUnit, detectionDistance / sr.sprite.pixelsPerUnit);
+            Vector2.down * detectionDistance / sr.sprite.pixelsPerUnit, detectionDistance / sr.sprite.pixelsPerUnit, layersToDetect);
             Debug.DrawRay(new Vector2(transform.position.x, transform.position.y - (sr.sprite.rect.height / 2 / sr.sprite.pixelsPerUnit) + detectionDistance / 2 / sr.sprite.pixelsPerUnit),
                 Vector2.down * detectionDistance / sr.sprite.pixelsPerUnit, Color.blue);
 
@@ -47,13 +49,14 @@ public class AXD_Arrow : MonoBehaviour
         else if (dir == Directions.left)
         {
             hit = Physics2D.Raycast(new Vector2(transform.position.x - (sr.sprite.rect.width / 2 / sr.sprite.pixelsPerUnit) + detectionDistance / 2 / sr.sprite.pixelsPerUnit, transform.position.y),
-            Vector2.left * detectionDistance / sr.sprite.pixelsPerUnit, detectionDistance / sr.sprite.pixelsPerUnit);
+            Vector2.left * detectionDistance / sr.sprite.pixelsPerUnit, detectionDistance / sr.sprite.pixelsPerUnit, layersToDetect);
             Debug.DrawRay(new Vector2(transform.position.x - (sr.sprite.rect.width / 2 / sr.sprite.pixelsPerUnit) + detectionDistance / 2 / sr.sprite.pixelsPerUnit, transform.position.y),
                 Vector2.left * detectionDistance / sr.sprite.pixelsPerUnit, Color.blue);
         }
 
         if (hit)
         {
+            Debug.Log("Collider Layer : " + LayerMask.LayerToName(hit.collider.gameObject.layer));
             if (LayerMask.LayerToName(hit.collider.gameObject.layer).Equals("TempleGround"))
             {
                 Debug.Log("Mur");
@@ -65,6 +68,10 @@ public class AXD_Arrow : MonoBehaviour
                 hit.collider.gameObject.GetComponent<AXD_PlayerStatus>().TakeDamage();
                 Destroy(this.gameObject);
             }
+        }
+        else
+        {
+            Debug.Log("Pas de Hit");
         }
         if (dir == Directions.up)
         {
