@@ -27,7 +27,7 @@ public class AXD_CheckPoint : MonoBehaviour
     {
         if (!activated)
         {
-            anim.Play("Anim_Checkpoint");
+            anim.Play("Anim_CheckpointOn");
         }
     }
 

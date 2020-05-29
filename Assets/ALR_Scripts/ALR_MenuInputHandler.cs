@@ -9,17 +9,10 @@ public class ALR_MenuInputHandler : MonoBehaviour
     private bool isPausedMenu;
     [SerializeField] ALR_ButtonAction targetButton;
 
+    private bool timeStopped = false;
+
     private void Update()
     {
-        if(isPaused)
-        {
-            Time.timeScale = 0;
-        }
-        else
-        {
-            Time.timeScale = 1;
-        }
-
         /*if(FindObjectOfType<ALR_PlayerInputHandler>().isAlreadyTalking == true)
         {
             isPaused = true;
@@ -27,7 +20,7 @@ public class ALR_MenuInputHandler : MonoBehaviour
         else
         {
             isPaused = false;
-        }*/
+        }
 
 
 
@@ -47,10 +40,32 @@ public class ALR_MenuInputHandler : MonoBehaviour
             DeactivatePause();
         }
 
+        if (isPaused == true)
+        {
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }*/
+
     }
 
-    void ActivatePause()
+    public void TimeStop(bool timeState)
     {
+        if(timeState)
+        {
+            Time.timeScale = 0;
+        } else
+        {
+            Time.timeScale = 1;
+        }
+
+    }
+
+    public void ActivatePause()
+    {
+        TimeStop(true);
         //Time.timeScale = 0;
         //AudioListener.pause = true;           //pour le son plus tard
         targetButton.isFromGame();
@@ -60,6 +75,7 @@ public class ALR_MenuInputHandler : MonoBehaviour
 
     public void DeactivatePause()
     {
+        TimeStop(false);
         //Time.timeScale = 1;
         //AudioListener.pause = false;          //pour le son plus tard
         pauseMenuUI.SetActive(false);

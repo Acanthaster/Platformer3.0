@@ -22,7 +22,9 @@ public class ALR_ButtonAction : MonoBehaviour
 
     public void LoadScene(int i)
     {
-            SceneManager.LoadScene(i); 
+            SceneManager.LoadScene(i);
+        // Impose au temps de s'écouler.
+            Time.timeScale = 1;
     }
 
     public void QuitGame()

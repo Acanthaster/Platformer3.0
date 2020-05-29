@@ -15,6 +15,7 @@ public class ALR_PlayerInputHandler : MonoBehaviour
     public ALR_DialogueTrigger dTrigger;
     public ALR_DialogueManager dManager;
     public AXD_ScoreManager sManager;
+    private ALR_MenuInputHandler mInput;
 
     bool checkingOnAir = false;
     bool isbufferedJumping = false;
@@ -24,6 +25,7 @@ public class ALR_PlayerInputHandler : MonoBehaviour
     public bool endingDialogue = false;
     private bool dialJustEnded = false;
     public bool makeOffering = false;
+    private bool isPauseMenu = false;
 
     float timeSinceJumpInput;
     float timeCheckGhostJump;
@@ -34,6 +36,7 @@ public class ALR_PlayerInputHandler : MonoBehaviour
         charac = GetComponent<ALR_CustomCharacterController>();
         cData = GetComponent<ALR_CharacterData>();
         sManager = FindObjectOfType<AXD_ScoreManager>();
+        mInput = FindObjectOfType<ALR_MenuInputHandler>();
 
     }
 
@@ -124,6 +127,7 @@ public class ALR_PlayerInputHandler : MonoBehaviour
             if(dialJustEnded == true)
             {
                 dialJustEnded = false;
+                mInput.TimeStop(false);
             } 
             else 
             {
@@ -161,6 +165,9 @@ public class ALR_PlayerInputHandler : MonoBehaviour
         if (Input.GetKeyDown("joystick button 0") && talkingToNPC == true && isAlreadyTalking == false)
         {
             isAlreadyTalking = true;
+            charac.interactionNPC.SetActive(false);
+            charac.interactionNPC1.SetActive(false);
+            mInput.TimeStop(true);
             dTrigger.TriggerDialogue();
             Debug.Log("Wesh");
         }
@@ -200,9 +207,31 @@ public class ALR_PlayerInputHandler : MonoBehaviour
             pStatus.ChangeWorld();
         }
 
-        // Charge l'écran du score après la fin du niveau. MODE DEBUG pour l'input !
+        if (Input.GetButtonDown("Pause Menu") && isAlreadyTalking == false)
+        {
+            if (isPauseMenu == false)
+            {
+                isPauseMenu = true;
+                mInput.ActivatePause();
+            } else
+            {
+                isPauseMenu = false;
+                mInput.DeactivatePause();
+            }
+            //isPaused = !isPaused;
+        }
 
-        /*if (Input.GetKey("o"))
+
+
+        if (Input.GetKeyDown("h"))
+        {
+            sManager.UpdateHighScore();
+            SceneManager.LoadScene("Menu_HighScore");
+        }
+
+            // Charge l'écran du score après la fin du niveau. MODE DEBUG pour l'input !
+
+            if (Input.GetKey("o"))
         {
 
             PlayerPrefs.SetInt("nbCorn", pStatus.Corn);
@@ -222,6 +251,6 @@ public class ALR_PlayerInputHandler : MonoBehaviour
 
 
             SceneManager.LoadScene("Menu_Score");
-        }*/
+        }
     }
 }
