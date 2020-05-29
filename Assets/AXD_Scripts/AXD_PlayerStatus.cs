@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class AXD_PlayerStatus : MonoBehaviour
 {
+    private Animator anim;
     public Camera mainCamera;
     float invincible;
     float invincibilityCoolDown;
     public bool dead;
     public int deaths;
-
     [Header("World")]
     public bool LivingWorld;
     public Vector2 LastCheckpoint;
@@ -24,6 +24,7 @@ public class AXD_PlayerStatus : MonoBehaviour
 
     private void Awake()
     {
+        anim = GetComponent<Animator>();
         deaths = 0;
         dead = false;
         LastCheckpoint = this.transform.position;
@@ -36,26 +37,21 @@ public class AXD_PlayerStatus : MonoBehaviour
         Cacao = 0;
     }
 
-    private void Update()
-    {
-        if (HealthPoint <= 0)
-        {
-            mainCamera.gameObject.transform.GetChild(0).gameObject.SetActive(false);
-            this.transform.position = LastCheckpoint;
-            mainCamera.transform.position = LastCheckpoint;
-            mainCamera.gameObject.transform.GetChild(0).gameObject.SetActive(true);
-            HealthPoint = MaxHealthPoint;
-            deaths++;
-            dead = true;
-        }
-    }
-
     public void TakeDamage()
     {
         if (Time.time > invincible)
         {
             HealthPoint--;
             invincible = Time.time + invincibilityCoolDown;
+        }
+        if (HealthPoint <= 0)
+        {
+            anim.SetTrigger("death");
+            Die();
+        }
+        else
+        {
+            anim.SetTrigger("damage");
         }
     }
 
@@ -66,6 +62,33 @@ public class AXD_PlayerStatus : MonoBehaviour
     
     public void Die()
     {
-        HealthPoint = 0;
+        Debug.Log("Die");
+        if (!dead)
+        {
+            StartCoroutine("Dying");
+        }
+        dead = true;
+    }
+
+    IEnumerator Dying()
+    {
+        
+        anim.Play("Anim_Death");
+        yield return new WaitForSeconds(1);
+        StartCoroutine("Respawning");
+    }
+
+    IEnumerator Respawning()
+    {
+        Debug.Log("Respawning");
+        mainCamera.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+        this.transform.position = LastCheckpoint;
+        mainCamera.transform.position = LastCheckpoint;
+        mainCamera.gameObject.transform.GetChild(0).gameObject.SetActive(true);
+        HealthPoint = MaxHealthPoint;
+        deaths++;
+        anim.Play("Anim_Respawn");
+        yield return new WaitForSeconds(1);
+        dead = false;
     }
 }

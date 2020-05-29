@@ -20,7 +20,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
     // Stock temporairement les données de collisions utilisées pour les opérations
     public struct CollisionInfo 
     {
-
+        
         public bool above, below, left, right;
         public RaycastHit2D hHit, vHit;
         public int groundLayer;
@@ -223,19 +223,21 @@ public class ALR_CustomCharacterController : MonoBehaviour
                     }
                     else if (hit.collider.CompareTag( "Checkpoint"))
                     {
-                        pStatus.LastCheckpoint = hit.collider.transform.position;
+
+                        Debug.Log("Y Above ground : " + (hit.collider.gameObject.GetComponent<AXD_CheckPoint>().GetYAboveGround(myCollider)));
+                        pStatus.LastCheckpoint = new Vector2(hit.collider.transform.position.x, hit.collider.gameObject.GetComponent<AXD_CheckPoint>().GetYAboveGround(myCollider));
                     }
 
                     return;
                 }
                 else if (LayerMask.LayerToName(hit.collider.gameObject.layer).Equals("Obstacles") && hit.collider.CompareTag("FireRain"))
                 {
-                    Debug.Log("Fire rain");
+                    //Debug.Log("Fire rain");
                     if (hit.collider.gameObject.GetComponent<AXD_FireRain>().damaging)
                     {
                         pStatus.TakeDamage();
 
-                        animator.SetTrigger(ANIMATION_DAMAGE);
+                        
                     }
                     else
                     {
@@ -246,10 +248,10 @@ public class ALR_CustomCharacterController : MonoBehaviour
                 }
                 else if (LayerMask.LayerToName(hit.collider.gameObject.layer).Equals("Obstacles") && !hit.collider.CompareTag("FireRain"))
                 {
-                    Debug.Log("Pas Fire rain");
+                    //Debug.Log("Pas Fire rain");
                     pStatus.TakeDamage();
 
-                    animator.SetTrigger(ANIMATION_DAMAGE);
+                    
                 }
 
                 if (hit.collider.CompareTag("NPC"))
@@ -305,7 +307,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
             if (hit) 
             {
-                Debug.Log("Collider Layer : " + LayerMask.LayerToName(hit.collider.gameObject.layer));
+                //Debug.Log("Collider Layer : " + LayerMask.LayerToName(hit.collider.gameObject.layer));
                 if (TotalSpeed.y < 0)
                 {
                     jumped = false;
@@ -326,8 +328,10 @@ public class ALR_CustomCharacterController : MonoBehaviour
                     }
                     else if (hit.collider.CompareTag("Checkpoint"))
                     {
-                        Debug.Log("Check");
-                        pStatus.LastCheckpoint = hit.collider.transform.position;
+                        //Debug.Log("Check");
+
+                        Debug.Log("Y Above ground : " + (hit.collider.gameObject.GetComponent<AXD_CheckPoint>().GetYAboveGround(myCollider)));
+                        pStatus.LastCheckpoint = new Vector2(hit.collider.transform.position.x, hit.collider.gameObject.GetComponent<AXD_CheckPoint>().GetYAboveGround(myCollider));
                     }
 
                     return;
@@ -337,22 +341,18 @@ public class ALR_CustomCharacterController : MonoBehaviour
                     if (hit.collider.gameObject.GetComponent<AXD_FireRain>().damaging)
                     {
                         pStatus.TakeDamage();
-                        animator.SetTrigger(ANIMATION_DAMAGE);
                     }
 
                 } else if (LayerMask.LayerToName(hit.collider.gameObject.layer).Equals("Obstacles") && !hit.collider.CompareTag("FireRain"))
                 {
                     pStatus.TakeDamage();
 
-                    animator.SetTrigger(ANIMATION_DAMAGE);
 
                 }
                 else if (LayerMask.LayerToName(hit.collider.gameObject.layer).Equals("Death"))
                 {
-                    Debug.Log("Death");
+                    //Debug.Log("Death");
                     pStatus.Die();
-
-                    animator.SetTrigger(ANIMATION_DEATH);
                 }
 
                 if (hit.collider.CompareTag("NPC"))
@@ -519,7 +519,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
                 // WALL JUMP
                 if (cData.canWallJump && collisions.onWall && !collisions.below) 
                 {
-                    Debug.Log("Wall Jump");
+                    //Debug.Log("Wall Jump");
                     externalForce.x += collisions.left ? cData.wallJumpSpeed : -cData.wallJumpSpeed;
                     collisions.onWall = false;
                 }
@@ -555,20 +555,22 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
             if (hit) 
             {
-                Debug.Log("Check ground Collider Layer : " + LayerMask.LayerToName(hit.collider.gameObject.layer));
+                //Debug.Log("Check ground Collider Layer : " + LayerMask.LayerToName(hit.collider.gameObject.layer));
                 if (TotalSpeed.y < 0)
                 {
                     jumped = false;
                 }
                 if (hit.collider.isTrigger && hit.collider.CompareTag("Checkpoint"))
                 {
-                    pStatus.LastCheckpoint = hit.collider.transform.position;
-                }else if (LayerMask.LayerToName(hit.collider.gameObject.layer).Equals("Death"))
-                {
-                    Debug.Log("Death");
-                    pStatus.Die();
 
-                    animator.SetTrigger(ANIMATION_DEATH);
+
+                    Debug.Log("Y Above ground : " + (hit.collider.gameObject.GetComponent<AXD_CheckPoint>().GetYAboveGround(myCollider)));
+                    pStatus.LastCheckpoint = new Vector2(hit.collider.transform.position.x, hit.collider.gameObject.GetComponent<AXD_CheckPoint>().GetYAboveGround(myCollider));
+                }
+                else if (LayerMask.LayerToName(hit.collider.gameObject.layer).Equals("Death"))
+                {
+                    //Debug.Log("Death");
+                    pStatus.Die();
                 }
 
                 else if (!hit.collider.CompareTag("NPC") && !hit.collider.CompareTag("FireRain"))

@@ -56,22 +56,18 @@ public class AXD_Arrow : MonoBehaviour
 
         if (hit)
         {
-            Debug.Log("Collider Layer : " + LayerMask.LayerToName(hit.collider.gameObject.layer));
+            //Debug.Log("Collider Layer : " + LayerMask.LayerToName(hit.collider.gameObject.layer));
             if (LayerMask.LayerToName(hit.collider.gameObject.layer).Equals("TempleGround"))
             {
-                Debug.Log("Mur");
+                //Debug.Log("Mur");
                 Destroy(this.gameObject);
             }
             else if (LayerMask.LayerToName(hit.collider.gameObject.layer).Equals("Player"))
             {
-                Debug.Log("Joueur");
+                //Debug.Log("Joueur");
                 hit.collider.gameObject.GetComponent<AXD_PlayerStatus>().TakeDamage();
                 Destroy(this.gameObject);
             }
-        }
-        else
-        {
-            Debug.Log("Pas de Hit");
         }
         if (dir == Directions.up)
         {
