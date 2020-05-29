@@ -223,8 +223,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
                     }
                     else if (hit.collider.CompareTag( "Checkpoint"))
                     {
-
-                        Debug.Log("Y Above ground : " + (hit.collider.gameObject.GetComponent<AXD_CheckPoint>().GetYAboveGround(myCollider)));
+                        hit.collider.gameObject.GetComponent<AXD_CheckPoint>().Activate();
                         pStatus.LastCheckpoint = new Vector2(hit.collider.transform.position.x, hit.collider.gameObject.GetComponent<AXD_CheckPoint>().GetYAboveGround(myCollider));
                     }
 
@@ -330,7 +329,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
                     {
                         //Debug.Log("Check");
 
-                        Debug.Log("Y Above ground : " + (hit.collider.gameObject.GetComponent<AXD_CheckPoint>().GetYAboveGround(myCollider)));
+                        hit.collider.gameObject.GetComponent<AXD_CheckPoint>().Activate();
                         pStatus.LastCheckpoint = new Vector2(hit.collider.transform.position.x, hit.collider.gameObject.GetComponent<AXD_CheckPoint>().GetYAboveGround(myCollider));
                     }
 
@@ -562,9 +561,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
                 }
                 if (hit.collider.isTrigger && hit.collider.CompareTag("Checkpoint"))
                 {
-
-
-                    Debug.Log("Y Above ground : " + (hit.collider.gameObject.GetComponent<AXD_CheckPoint>().GetYAboveGround(myCollider)));
+                    hit.collider.gameObject.GetComponent<AXD_CheckPoint>().Activate();
                     pStatus.LastCheckpoint = new Vector2(hit.collider.transform.position.x, hit.collider.gameObject.GetComponent<AXD_CheckPoint>().GetYAboveGround(myCollider));
                 }
                 else if (LayerMask.LayerToName(hit.collider.gameObject.layer).Equals("Death"))
