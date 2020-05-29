@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class ALR_CustomCharacterController : MonoBehaviour
 {
     public GameObject self;
     public GameObject interactionNPC;
     public GameObject interactionNPC1;
+    public GameObject interactionAltar;
 
     // Stock temporairement les points d'origine des Raycasts.
     protected struct RaycastOrigins 
@@ -752,6 +754,19 @@ public class ALR_CustomCharacterController : MonoBehaviour
             interactionNPC.SetActive(false);
             interactionNPC1.SetActive(false);
         }
+
+        if(hit.collider!=null && hit.collider.CompareTag("Altar"))
+        {
+            pInput.makeOffering = true;
+
+            interactionAltar.SetActive(true);
+            Debug.Log("GIFT !");
+        }
+        else
+        {
+            interactionAltar.SetActive(false);
+        }
+        
 
 
     }

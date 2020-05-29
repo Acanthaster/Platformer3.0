@@ -23,6 +23,7 @@ public class ALR_PlayerInputHandler : MonoBehaviour
     public bool isAlreadyTalking = false;
     public bool endingDialogue = false;
     private bool dialJustEnded = false;
+    public bool makeOffering = false;
 
     float timeSinceJumpInput;
     float timeCheckGhostJump;
@@ -118,7 +119,7 @@ public class ALR_PlayerInputHandler : MonoBehaviour
             dialJustEnded = true;
         } 
 
-        if(Input.GetKeyDown("joystick button 0") && talkingToNPC == false) 
+        if(Input.GetKeyDown("joystick button 0") && talkingToNPC == false && makeOffering == false) 
         {
             if(dialJustEnded == true)
             {
@@ -164,9 +165,28 @@ public class ALR_PlayerInputHandler : MonoBehaviour
             Debug.Log("Wesh");
         }
 
-      
+        if (Input.GetKeyDown("joystick button 0") && makeOffering == true)
+        {
+            PlayerPrefs.SetInt("nbCorn", pStatus.Corn);
+            PlayerPrefs.SetInt("valueCorn", sManager.cornValue);
 
-        if (Input.GetKeyUp("joystick button 0")) 
+            PlayerPrefs.SetInt("nbCacao", pStatus.Cacao);
+            PlayerPrefs.SetInt("valueCacao", sManager.cacaoValue);
+
+            PlayerPrefs.SetInt("nbDeath", pStatus.deaths);
+            PlayerPrefs.SetInt("valueDeath", sManager.deathValue);
+
+            var sec = AXD_TimeManager.GetSeconds();
+            PlayerPrefs.SetInt("seconds", sec);
+
+            var score = AXD_ScoreManager.GetScore();
+            PlayerPrefs.SetInt("score", score);
+
+            SceneManager.LoadScene("Menu_Score");
+        }
+
+
+            if (Input.GetKeyUp("joystick button 0")) 
         {
             //Debug.Log("STOP JUMP ! ");
             charac.EndJump();
@@ -182,7 +202,7 @@ public class ALR_PlayerInputHandler : MonoBehaviour
 
         // Charge l'écran du score après la fin du niveau. MODE DEBUG pour l'input !
 
-        if (Input.GetKey("o"))
+        /*if (Input.GetKey("o"))
         {
 
             PlayerPrefs.SetInt("nbCorn", pStatus.Corn);
@@ -202,6 +222,6 @@ public class ALR_PlayerInputHandler : MonoBehaviour
 
 
             SceneManager.LoadScene("Menu_Score");
-        }
+        }*/
     }
 }
