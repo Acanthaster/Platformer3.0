@@ -38,8 +38,8 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
             if(!onWall) 
             {
-            left = false;
-            right = false;
+                left = false;
+                right = false;
             }
           
             hHit = new RaycastHit2D();
@@ -92,7 +92,8 @@ public class ALR_CustomCharacterController : MonoBehaviour
     protected Vector2 speed = Vector2.zero; // Stock la vitesse de base
     [SerializeField]
     public Vector2 externalForce = Vector2.zero; // Stock les forces ingérentes
-
+    public bool wallJumped;
+    public float ponderatedWJSpeed;
     protected float gravityScale = 1; // à set ?
     protected float minimumMoveThreshold = 0.0001f;
     protected float timeSinceFalling; //Pour tenir compte du temps pour le ghost jump
@@ -101,14 +102,13 @@ public class ALR_CustomCharacterController : MonoBehaviour
     private bool replaceOnMovingPlatform = false;
     public bool isGhostJumping = false;
     public bool jumped = false;
+    
     public bool IgnoreFriction { get; set; } // CHECK NEEDED !!
     public bool Immobile { get; set; } // CHECK NEEDED !!
-    
+    private CollisionInfo lastSideWJ;
 
     // Sert à capter les modifications sur la vitesse de base par les forces ingérentes
     public Vector2 TotalSpeed { get { return speed + externalForce; } } 
-
-
 
 	//ANIMATION
 
@@ -128,6 +128,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
    
     public void Start()
     {
+        wallJumped = false;
         pStatus = GetComponent<AXD_PlayerStatus>();
         animator = GetComponent<Animator>();
         cData = GetComponent<ALR_CharacterData>();
@@ -150,7 +151,29 @@ public class ALR_CustomCharacterController : MonoBehaviour
         Move((TotalSpeed) * Time.fixedDeltaTime);
         PostMove();
         SetAnimations();
-
+        if (wallJumped)
+        {
+            if(TotalSpeed.x <= cData.wallSpeedThreshhold && TotalSpeed.x >= -cData.wallSpeedThreshhold)
+            {
+                ponderatedWJSpeed = 0;
+            }
+            if ((ponderatedWJSpeed >0 && speed.x > 0 && ponderatedWJSpeed > speed.x) || (ponderatedWJSpeed < 0 && speed.x < 0 && ponderatedWJSpeed < speed.x))
+            {
+                ponderatedWJSpeed = speed.x;
+            }
+            if (ponderatedWJSpeed != 0)
+            {
+                if (Mathf.Sign(pInput.translation) != Mathf.Sign(ponderatedWJSpeed))
+                {
+                    ponderatedWJSpeed += pInput.translation/2;
+                }
+            }
+            if(Mathf.Sign(ponderatedWJSpeed) != Mathf.Sign(pInput.translation))
+            {
+                externalForce.y += pConfig.gravity*Time.fixedDeltaTime*cData.gravityMalusOnWJOnSameSide;
+            }
+            externalForce.x = ponderatedWJSpeed;
+        }
         if (isOnMovingPlatform)
         {
             if (!replaceOnMovingPlatform)
@@ -309,7 +332,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
                 //Debug.Log("Collider Layer : " + LayerMask.LayerToName(hit.collider.gameObject.layer));
                 if (TotalSpeed.y < 0)
                 {
-                    jumped = false;
+                    jumped = wallJumped = false;
                 }
                 if (hit.collider.isTrigger && (hit.collider.CompareTag("Corn") || hit.collider.CompareTag("Cacao") || hit.collider.CompareTag("Checkpoint")))
                 {
@@ -518,12 +541,20 @@ public class ALR_CustomCharacterController : MonoBehaviour
                 // WALL JUMP
                 if (cData.canWallJump && collisions.onWall && !collisions.below) 
                 {
+                    wallJumped = true;
                     //Debug.Log("Wall Jump");
-                    externalForce.x += collisions.left ? cData.wallJumpSpeed : -cData.wallJumpSpeed;
+                    if (collisions.left)
+                    {
+                        ponderatedWJSpeed = cData.wallJumpSpeed*3;
+                    }
+                    else if (collisions.right)
+                    {
+                        ponderatedWJSpeed = -cData.wallJumpSpeed*3;
+                    }
+                    externalForce.x += ponderatedWJSpeed;
+                    
                     collisions.onWall = false;
                 }
-
-               
             }
         }
     }
@@ -557,7 +588,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
                 //Debug.Log("Check ground Collider Layer : " + LayerMask.LayerToName(hit.collider.gameObject.layer));
                 if (TotalSpeed.y < 0)
                 {
-                    jumped = false;
+                    jumped = wallJumped = false;
                 }
                 if (hit.collider.isTrigger && hit.collider.CompareTag("Checkpoint"))
                 {
@@ -693,7 +724,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
                 }
             }
         }
-
+        wallJumped = false;
         return false;
     }
 
@@ -725,6 +756,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
             collisions.onWall = false;
             speed.y = 0;
         }
+        wallJumped = false;
      }
 
     public void CheckNPC()
@@ -750,8 +782,8 @@ public class ALR_CustomCharacterController : MonoBehaviour
         {
             pInput.talkingToNPC = false;
 
-            interactionNPC.SetActive(false);
-            interactionNPC1.SetActive(false);
+            //interactionNPC.SetActive(false);
+            //interactionNPC1.SetActive(false);
         }
 
         if(hit.collider!=null && hit.collider.CompareTag("Altar"))
@@ -763,7 +795,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
         }
         else
         {
-            interactionAltar.SetActive(false);
+            //interactionAltar.SetActive(false);
         }
         
 

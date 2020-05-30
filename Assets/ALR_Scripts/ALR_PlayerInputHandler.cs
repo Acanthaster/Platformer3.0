@@ -15,7 +15,7 @@ public class ALR_PlayerInputHandler : MonoBehaviour
     public ALR_DialogueTrigger dTrigger;
     public ALR_DialogueManager dManager;
     public AXD_ScoreManager sManager;
-
+    public float translation;
     bool checkingOnAir = false;
     bool isbufferedJumping = false;
     bool isGhostJumping = false;
@@ -24,7 +24,6 @@ public class ALR_PlayerInputHandler : MonoBehaviour
     public bool endingDialogue = false;
     private bool dialJustEnded = false;
     public bool makeOffering = false;
-
     float timeSinceJumpInput;
     float timeCheckGhostJump;
 
@@ -40,20 +39,12 @@ public class ALR_PlayerInputHandler : MonoBehaviour
   
     void Update()
     {
-        float translation = Input.GetAxis("Horizontal");
+        translation = Input.GetAxis("Horizontal");
         charac.Walk(translation);
 
         if(checkingOnAir)
         {
-      
-
-            if(charac.collisions.onGround)
-            {
-                //Debug.Log("Pas dans les airs !");
-
-            } 
-            
-            else if (!charac.collisions.onGround )
+        if (!charac.collisions.onGround )
             {
                 //Debug.Log("Buffering !");
                 checkingOnAir = false;
