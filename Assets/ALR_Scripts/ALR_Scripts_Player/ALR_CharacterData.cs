@@ -20,6 +20,8 @@ public class ALR_CharacterData : MonoBehaviour
     public float airDecelerationTime;
     public float maxGhostJump;
     public float maxBufferedJump;
+    public float gravityMalusOnWJOnSameSide;
+
 
     [Header("Wall Sliding/Jumping")]
     public bool canWallSlide;
@@ -27,5 +29,6 @@ public class ALR_CharacterData : MonoBehaviour
     public bool canWallJump;
     public float wallJumpSpeed;
     public float maxGhostWallJump;
+    public float wallSpeedThreshhold;
 
 }
