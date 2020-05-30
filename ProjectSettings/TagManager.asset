@@ -46,6 +46,21 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: 5e plan
+    uniqueID: 617139917
+    locked: 0
+  - name: 4e plan
+    uniqueID: 2474346859
+    locked: 0
+  - name: 3e plan
+    uniqueID: 3561356813
+    locked: 0
+  - name: 2nd plan
+    uniqueID: 2483687883
+    locked: 0
+  - name: 1er plan background
+    uniqueID: 3295103151
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
