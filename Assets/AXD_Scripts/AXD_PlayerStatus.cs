@@ -11,6 +11,7 @@ public class AXD_PlayerStatus : MonoBehaviour
     float invincibilityCoolDown;
     public bool dead;
     public int deaths;
+    public bool resetUI;
     [Header("World")]
     public bool LivingWorld;
     public Vector2 LastCheckpoint;
@@ -81,7 +82,6 @@ public class AXD_PlayerStatus : MonoBehaviour
     IEnumerator Respawning()
     {
         anim.SetTrigger("respawn");
-        Debug.Log("Respawning");
         mainCamera.gameObject.transform.GetChild(0).gameObject.SetActive(false);
         this.transform.position = LastCheckpoint;
         mainCamera.transform.position = LastCheckpoint;
@@ -91,5 +91,6 @@ public class AXD_PlayerStatus : MonoBehaviour
         //anim.Play("Anim_Respawn");
         yield return new WaitForSeconds(1);
         dead = false;
+        resetUI = true;
     }
 }
