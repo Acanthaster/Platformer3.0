@@ -16,6 +16,7 @@ public class ALR_PlayerInputHandler : MonoBehaviour
     public ALR_DialogueManager dManager;
     public AXD_ScoreManager sManager;
     private ALR_MenuInputHandler mInput;
+    private ALR_DebugCheckPoints dCheckPoints;
 
     public float translation;
     bool checkingOnAir = false;
@@ -38,6 +39,7 @@ public class ALR_PlayerInputHandler : MonoBehaviour
         cData = GetComponent<ALR_CharacterData>();
         sManager = FindObjectOfType<AXD_ScoreManager>();
         mInput = FindObjectOfType<ALR_MenuInputHandler>();
+        dCheckPoints = FindObjectOfType<ALR_DebugCheckPoints>();
 
     }
 
@@ -222,9 +224,19 @@ public class ALR_PlayerInputHandler : MonoBehaviour
             SceneManager.LoadScene("Menu_HighScore");
         }
 
-            // Charge l'écran du score après la fin du niveau. MODE DEBUG pour l'input !
+        if (Input.GetKeyDown("i"))
+        {
+            dCheckPoints.NextCheckPoint();
+        }
 
-            if (Input.GetKey("o"))
+        if (Input.GetKeyDown("u"))
+        {
+            dCheckPoints.PastCheckPoint();
+        }
+
+        // Charge l'écran du score après la fin du niveau. MODE DEBUG pour l'input !
+
+        if (Input.GetKey("o"))
         {
 
             PlayerPrefs.SetInt("nbCorn", pStatus.Corn);
