@@ -9,6 +9,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
     public GameObject interactionNPC;
     public GameObject interactionNPC1;
     public GameObject interactionAltar;
+    public GameObject NPC1;
 
     // Stock temporairement les points d'origine des Raycasts.
     protected struct RaycastOrigins 
@@ -26,6 +27,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
         public int groundLayer;
         public bool onGround;
         public bool onWall;
+
 
         //En a-t-on vraiment besoin ?
         public float groundAngle; //utile ?
@@ -83,7 +85,6 @@ public class ALR_CustomCharacterController : MonoBehaviour
     protected float horizRayCount; // Stock un compteur pour eux
     protected float vertiRaySpacing; // Même chose qu'au dessus
     protected float vertiRayCount;
-
 
 
     //MOUVEMENT
@@ -242,7 +243,8 @@ public class ALR_CustomCharacterController : MonoBehaviour
                     else if (hit.collider.CompareTag("Cacao"))
                     {
                         pStatus.Cacao += 1;
-                        Destroy(hit.collider.gameObject);
+                        hit.collider.gameObject.GetComponent<ALR_CacaoAnim>().Collect();
+                        //Destroy(hit.collider.gameObject);
                     }
                     else if (hit.collider.CompareTag( "Checkpoint"))
                     {
@@ -346,7 +348,8 @@ public class ALR_CustomCharacterController : MonoBehaviour
                     else if (hit.collider.CompareTag("Cacao"))
                     {
                         pStatus.Cacao += 1;
-                        Destroy(hit.collider.gameObject);
+                        hit.collider.gameObject.GetComponent<ALR_CacaoAnim>().Collect();
+                        //Destroy(hit.collider.gameObject);
                     }
                     else if (hit.collider.CompareTag("Checkpoint"))
                     {
@@ -782,8 +785,8 @@ public class ALR_CustomCharacterController : MonoBehaviour
         {
             pInput.talkingToNPC = false;
 
-            //interactionNPC.SetActive(false);
-            //interactionNPC1.SetActive(false);
+            interactionNPC.SetActive(false);
+            interactionNPC1.SetActive(false);
         }
 
         if(hit.collider!=null && hit.collider.CompareTag("Altar"))
@@ -795,7 +798,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
         }
         else
         {
-            //interactionAltar.SetActive(false);
+            interactionAltar.SetActive(false);
         }
         
 

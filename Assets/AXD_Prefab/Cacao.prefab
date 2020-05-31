@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2877204974044273547}
   - component: {fileID: 3739886755904512403}
   - component: {fileID: 3903440945322596637}
+  - component: {fileID: -3647699274074668508}
   m_Layer: 10
   m_Name: Cacao
   m_TagString: Cacao
@@ -118,3 +119,15 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &-3647699274074668508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6976471898637397469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9246fc687e1d6364ca76e04e4b949355, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

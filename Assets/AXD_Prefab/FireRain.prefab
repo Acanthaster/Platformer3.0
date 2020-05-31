@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 436599654647754201}
   - component: {fileID: 565543651076797675}
   - component: {fileID: 2037578048898857944}
+  - component: {fileID: 2509303567930387581}
   m_Layer: 13
   m_Name: FireRain
   m_TagString: FireRain
@@ -71,8 +72,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -1
-  m_Sprite: {fileID: 21300000, guid: 0d555ee0c95fbcb409ee97119652424d, type: 3}
+  m_SortingOrder: 1
+  m_Sprite: {fileID: 21300000, guid: 402f112f696c8f64b98971fe49b71da6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -96,8 +97,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sprites:
-  - {fileID: 21300000, guid: 0d555ee0c95fbcb409ee97119652424d, type: 3}
-  - {fileID: 21300000, guid: f7223d53363ca7c479971ca35b04206d, type: 3}
+  - {fileID: 21300000, guid: 402f112f696c8f64b98971fe49b71da6, type: 3}
+  - {fileID: 21300000, guid: ebf72b4ebef0f8d4f94f5b5287187dda, type: 3}
   pStatus: {fileID: 0}
   damaging: 0
 --- !u!61 &2037578048898857944
@@ -117,12 +118,31 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.8888889, y: 0.8888889}
+    oldSize: {x: 0.90909094, y: 3.5681818}
     newSize: {x: 0.4, y: 0.4}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.47, y: 0.885}
+  m_Size: {x: 0.4, y: 3.565}
   m_EdgeRadius: 0
+--- !u!95 &2509303567930387581
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3623577380303039273}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2a6a7428c0982c640b18f9765c306c5d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
