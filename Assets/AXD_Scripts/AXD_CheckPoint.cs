@@ -19,7 +19,6 @@ public class AXD_CheckPoint : MonoBehaviour
     
     public float GetYAboveGround(BoxCollider2D collider)
     {
-        Debug.Log("YGround : " + YGround+"\nTaille Sprite : "+ (collider.size.y / 2));
         return transform.position.y - YGround + collider.size.y/2;
     }
 

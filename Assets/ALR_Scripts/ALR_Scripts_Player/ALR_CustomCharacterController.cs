@@ -356,7 +356,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
             if (hit)
             {
-                Debug.Log("Collider Layer : " + LayerMask.LayerToName(hit.collider.gameObject.layer));
+                //Debug.Log("Collider Layer : " + LayerMask.LayerToName(hit.collider.gameObject.layer));
                 if (TotalSpeed.y < 0)
                 {
                     jumped = wallJumped = false;
@@ -620,7 +620,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
             if (hit)
             {
-                //Debug.Log("Check ground Collider Layer : " + LayerMask.LayerToName(hit.collider.gameObject.layer));
+                
                 if (TotalSpeed.y < 0)
                 {
                     jumped = wallJumped = false;
@@ -638,6 +638,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
                 else if (!hit.collider.CompareTag("NPC") && !hit.collider.CompareTag("FireRain"))
                 {
+                    Debug.Log("Hey ! Check ground Collider Layer : " + LayerMask.LayerToName(hit.collider.gameObject.layer));
                     collisions.onGround = true;
                     collisions.onWall = false;
 
@@ -650,9 +651,6 @@ public class ALR_CustomCharacterController : MonoBehaviour
                     Debug.DrawRay(rayOrigin, Vector2.down * skinWidth * 2, Color.magenta);
                     break;
                 }
-
-
-
             }
         }
 
