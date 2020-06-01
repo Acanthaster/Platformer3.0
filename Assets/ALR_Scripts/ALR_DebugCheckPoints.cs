@@ -8,13 +8,12 @@ public class ALR_DebugCheckPoints : MonoBehaviour
     Transform[] allChildren = new Transform[11];
 
     public Camera mainCamera;
-    GameObject avatar;
+    public GameObject avatar;
 
     private int pointer = 1;
     // Start is called before the first frame update
     void Start()
     {
-        avatar = FindObjectOfType<ALR_CustomCharacterController>().gameObject;
         allChildren = GetComponentsInChildren<Transform>();
     }
 

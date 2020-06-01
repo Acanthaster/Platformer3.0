@@ -10,6 +10,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
     public GameObject interactionNPC1;
     public GameObject interactionAltar;
     public GameObject NPC1;
+    public Camera mainCamera;
 
     // Stock temporairement les points d'origine des Raycasts.
     protected struct RaycastOrigins
@@ -102,7 +103,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
     protected float gravityScale = 1; // à set ?
     protected float minimumMoveThreshold = 0.0001f;
     protected float timeSinceFalling; //Pour tenir compte du temps pour le ghost jump
-
+    private bool spawning;
     private bool isOnMovingPlatform = false;
     private bool replaceOnMovingPlatform = false;
     public bool isGhostJumping = false;
@@ -131,8 +132,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
     public bool FacingRight = true;
 
-
-    public void Start()
+    private void Awake()
     {
         knockBackTime = 0;
         wallJumped = false;
@@ -142,8 +142,15 @@ public class ALR_CustomCharacterController : MonoBehaviour
         myCollider = GetComponent<BoxCollider2D>();
         pConfig = GameObject.FindObjectOfType<ALR_PhysicsConfig>();
         pInput = GetComponent<ALR_PlayerInputHandler>();
+        pInput.lockInput = true;
+        spawning = true;
+    }
 
-
+    public void Start()
+    {
+        AXD_CheckPoint startPoint = GameObject.Find("StartPoint").GetComponent<AXD_CheckPoint>();
+        transform.position = new Vector2(startPoint.transform.position.x,startPoint.GetYAboveGround(myCollider));
+        StartCoroutine("Spawn");
         collisionMask = pConfig.characterCollisionMask;
 
         // Pour initialiser les raycasts en nombres et taille par rapport à la BoxCollider
@@ -156,7 +163,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
         if (pStatus.dead)
         {
             pInput.lockInput = true;
-        }else if (!takingDamage)
+        }else if (!takingDamage && !spawning)
         {
             pInput.lockInput = false;
         }
@@ -188,7 +195,6 @@ public class ALR_CustomCharacterController : MonoBehaviour
         }
         else if (pInput.lockInput)
         {
-            Debug.Log("Bloqué, dead ? " + pStatus.dead);
             speed = externalForce = new Vector2(0, 0);
         }
         Move((TotalSpeed) * Time.fixedDeltaTime);
@@ -940,6 +946,12 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
         }
 
+    }
+    IEnumerator Spawn()
+    {
+        animator.Play("Anim_Respawn");
+        yield return new WaitForSeconds(2);
+        spawning = false;
     }
 
 }
