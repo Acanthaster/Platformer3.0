@@ -47,6 +47,7 @@ public class ALR_PlayerInputHandler : MonoBehaviour
 
     void Update()
     {
+        
         translation = Input.GetAxis("Horizontal");
         if (!lockInput)
         {
@@ -193,7 +194,7 @@ public class ALR_PlayerInputHandler : MonoBehaviour
 
         // POUR LE SWITCH DE MONDE
 
-        //World Switch = Right Bumper
+        //World Switch = Right Bumper or Left Bumper
         if ((Input.GetButtonDown("World Switch") || (Input.GetKeyDown("left shift"))) && switchDisable == false)
         {
             pStatus.ChangeWorld();
@@ -222,10 +223,8 @@ public class ALR_PlayerInputHandler : MonoBehaviour
 
         if (Input.GetKeyDown("u"))
         {
-            dCheckPoints.PastCheckPoint();
+            dCheckPoints.PreviousCheckPoint();
         }
-
-
 
         // Charger l'écran des scores ou high score ==> DEBUG
 

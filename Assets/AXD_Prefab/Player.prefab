@@ -94,6 +94,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b149777db5c55ee4185dba809cb2f05e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dTrigger: {fileID: 0}
+  dManager: {fileID: 0}
+  sManager: {fileID: 0}
+  translation: 0
+  talkingToNPC: 0
+  isAlreadyTalking: 0
+  endingDialogue: 0
+  makeOffering: 0
+  switchDisable: 1
+  lockInput: 0
 --- !u!114 &3661866206367488471
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -107,13 +117,69 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   self: {fileID: 0}
+  interactionNPC: {fileID: 0}
+  interactionNPC1: {fileID: 0}
+  interactionAltar: {fileID: 0}
+  NPC1: {fileID: 0}
   sprite: {fileID: 3661866207179204925}
   graphicsTransform: {fileID: 3661866207179204922}
   raySpacing: 0.125
   skinWidth: 0.015
   speed: {x: 0, y: 0}
   externalForce: {x: 0, y: 0}
+  knockBackCurveX:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.0005163776
+      value: 4.9753222
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.9999023
+      value: 0.0035287887
+      inSlope: -18.408293
+      outSlope: -18.408293
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.043823387
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  knockBackCurveY:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.00032394752
+      value: 32.849167
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1.000606
+      value: -0.0014265334
+      inSlope: -104.10295
+      outSlope: -104.10295
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.2681411
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  knockBackTime: 0
+  wallJumped: 0
+  ponderatedWJSpeed: 0
   isGhostJumping: 0
+  jumped: 0
   FacingRight: 1
 --- !u!114 &3661866206367488468
 MonoBehaviour:
@@ -130,6 +196,7 @@ MonoBehaviour:
   maxSpeed: 10
   accelerationTime: 0.5
   decelerationTime: 0.1
+  lockInputTime: 0
   maxJumpHeight: 5.85
   minJumpHeight: 0.75
   advancedAirControl: 0
@@ -137,11 +204,13 @@ MonoBehaviour:
   airDecelerationTime: 0
   maxGhostJump: 0.5
   maxBufferedJump: 0.5
+  gravityMalusOnWJOnSameSide: 0
   canWallSlide: 1
   wallSlideSpeed: 2
   canWallJump: 1
   wallJumpSpeed: 5
   maxGhostWallJump: 0
+  wallSpeedThreshhold: 0
 --- !u!114 &3661866206367488466
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,7 +223,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cc2e2a278ae1d14aa335dfc12890864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainCamera: {fileID: 0}
+  cData: {fileID: 0}
+  pInput: {fileID: 0}
+  invincibilityCoolDown: 0
   dead: 0
+  deaths: 0
+  resetUI: 0
+  lockedInput: 0
   LivingWorld: 0
   LastCheckpoint: {x: 0, y: 0}
   MaxHealthPoint: 0

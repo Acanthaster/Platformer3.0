@@ -9,6 +9,7 @@ public class AXD_PlayerStatus : MonoBehaviour
     public Camera mainCamera;
     public ALR_CharacterData cData;
     public ALR_PlayerInputHandler pInput;
+    public ALR_CustomCharacterController pController;
     float invincible;
     public float invincibilityCoolDown;
     public bool dead;
@@ -32,7 +33,8 @@ public class AXD_PlayerStatus : MonoBehaviour
     {
         cData = GetComponent<ALR_CharacterData>();
         anim = GetComponent<Animator>();
-        pInput = GetComponent<ALR_PlayerInputHandler>();    
+        pInput = GetComponent<ALR_PlayerInputHandler>();
+        pController = GetComponent<ALR_CustomCharacterController>();
         deaths = 0;
         dead = false;
         LastCheckpoint = this.transform.position;
@@ -51,7 +53,7 @@ public class AXD_PlayerStatus : MonoBehaviour
         {
             HealthPoint--;
             invincible = Time.time + invincibilityCoolDown;
-            
+            pController.takingDamage = true;
         }
         if (HealthPoint <= 0)
         {

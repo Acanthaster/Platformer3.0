@@ -96,6 +96,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
     public AnimationCurve knockBackCurveX;
     public AnimationCurve knockBackCurveY;
     public float knockBackTime;
+    public bool takingDamage;
     public bool wallJumped;
     public float ponderatedWJSpeed;
     protected float gravityScale = 1; // à set ?
@@ -156,9 +157,10 @@ public class ALR_CustomCharacterController : MonoBehaviour
         {
             pInput.lockInput = false;
             knockBackTime = 0;
+            takingDamage = false;
         }
         collisions.Reset();
-        if (pInput.lockInput)
+        if (pInput.lockInput && takingDamage)
         {
             knockBackTime += Time.deltaTime;
             speed = new Vector2(0, 0);
@@ -285,7 +287,6 @@ public class ALR_CustomCharacterController : MonoBehaviour
                     {
                         pStatus.TakeDamage();
 
-
                     }
                     else
                     {
@@ -355,7 +356,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
             if (hit)
             {
-                //Debug.Log("Collider Layer : " + LayerMask.LayerToName(hit.collider.gameObject.layer));
+                Debug.Log("Collider Layer : " + LayerMask.LayerToName(hit.collider.gameObject.layer));
                 if (TotalSpeed.y < 0)
                 {
                     jumped = wallJumped = false;
@@ -391,13 +392,15 @@ public class ALR_CustomCharacterController : MonoBehaviour
                     {
                         pStatus.TakeDamage();
                     }
+                    else
+                    {
+                        return;
+                    }
 
                 }
                 else if (LayerMask.LayerToName(hit.collider.gameObject.layer).Equals("Obstacles") && !hit.collider.CompareTag("FireRain"))
                 {
                     pStatus.TakeDamage();
-
-
                 }
                 else if (LayerMask.LayerToName(hit.collider.gameObject.layer).Equals("Death"))
                 {
