@@ -31,7 +31,7 @@ public class ALR_DebugCheckPoints : MonoBehaviour
         }
     }
 
-    public void PastCheckPoint()
+    public void PreviousCheckPoint()
     {
         if (pointer > 1)
         {

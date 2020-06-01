@@ -6,6 +6,7 @@ public class AXD_FireRain : MonoBehaviour
 {
     public List<Sprite> sprites;
     public AXD_PlayerStatus pStatus;
+    private BoxCollider2D collider;
     SpriteRenderer display;
     public bool damaging;
     bool world;
@@ -20,6 +21,7 @@ public class AXD_FireRain : MonoBehaviour
         damaging = true;
         display = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
+        collider = GetComponent<BoxCollider2D>();
     }
 
     // Update is called once per frame
@@ -30,6 +32,10 @@ public class AXD_FireRain : MonoBehaviour
             world = pStatus.LivingWorld;
             if (world)
             {
+                if (!collider.enabled)
+                {
+                    collider.enabled = true;
+                }
                 damaging = true;
                 display.sprite = sprites[0];
 
@@ -37,6 +43,10 @@ public class AXD_FireRain : MonoBehaviour
             }
             else
             {
+                if (collider.enabled)
+                {
+                    collider.enabled = false;
+                }
                 damaging = false;
                 display.sprite = sprites[1];
 

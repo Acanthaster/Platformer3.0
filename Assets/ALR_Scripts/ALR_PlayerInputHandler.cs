@@ -4,12 +4,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
-[RequireComponent(typeof(ALR_CustomCharacterController))] 
+[RequireComponent(typeof(ALR_CustomCharacterController))]
 
 public class ALR_PlayerInputHandler : MonoBehaviour
 {
 
-	private ALR_CustomCharacterController charac;
+    private ALR_CustomCharacterController charac;
     private ALR_CharacterData cData;
     private AXD_PlayerStatus pStatus;
     public ALR_DialogueTrigger dTrigger;
@@ -29,7 +29,7 @@ public class ALR_PlayerInputHandler : MonoBehaviour
     public bool makeOffering = false;
     private bool isPauseMenu = false;
     public bool switchDisable = true;
-
+    public bool lockInput = false;
     float timeSinceJumpInput;
     float timeCheckGhostJump;
 
@@ -44,61 +44,64 @@ public class ALR_PlayerInputHandler : MonoBehaviour
 
     }
 
-  
+
     void Update()
     {
+        
         translation = Input.GetAxis("Horizontal");
-        charac.Walk(translation);
-
-        if(checkingOnAir)
+        if (!lockInput)
         {
-        if (!charac.collisions.onGround )
+            charac.Walk(translation);
+        }
+
+        if (checkingOnAir)
+        {
+            if (!charac.collisions.onGround)
             {
                 checkingOnAir = false;
                 isbufferedJumping = true;
             }
 
-         
+
         }
 
-        if(isbufferedJumping)
+        if (isbufferedJumping)
         {
             timeSinceJumpInput += Time.fixedDeltaTime;
 
-            if(charac.collisions.onGround == true && timeSinceJumpInput <= cData.maxBufferedJump)
+            if (charac.collisions.onGround == true && timeSinceJumpInput <= cData.maxBufferedJump)
             {
                 charac.Jump();
                 charac.jumped = true;
                 timeSinceJumpInput = 0f;
                 isbufferedJumping = false;
 
-            } 
+            }
             else if (timeSinceJumpInput > cData.maxBufferedJump)
             {
                 timeSinceJumpInput = 0f;
-               isbufferedJumping = false;
+                isbufferedJumping = false;
             }
         }
 
-        if(charac.collisions.below == false)
+        if (charac.collisions.below == false)
         {
 
             timeCheckGhostJump += Time.fixedDeltaTime;
-           
 
             if (timeCheckGhostJump <= cData.maxGhostJump && !charac.jumped)
             {
                 charac.isGhostJumping = true;
-            } 
+            }
             else
             {
                 charac.isGhostJumping = false;
             }
 
-        } 
+        }
         else
         {
-                timeCheckGhostJump = 0;
+            timeCheckGhostJump = 0;
         }
 
 
@@ -108,47 +111,46 @@ public class ALR_PlayerInputHandler : MonoBehaviour
             talkingToNPC = false;
             endingDialogue = false;
             dialJustEnded = true;
-        } 
+        }
 
-        if((Input.GetKeyDown("joystick button 0") || Input.GetKeyDown("space")) && talkingToNPC == false && makeOffering == false) 
+        if ((Input.GetKeyDown("joystick button 0") || Input.GetKeyDown("space")) && talkingToNPC == false && makeOffering == false)
         {
-            if(dialJustEnded == true)
+            if (dialJustEnded == true)
             {
                 dialJustEnded = false;
                 mInput.TimeStop(false);
-            } 
-            else 
+            }
+            else
             {
-
-                charac.Jump();
-                charac.jumped = true;
-
-
-                //Debug.Log("INPUT JUMP !");
-                charac.Jump();
-
-                if (checkingOnAir == false && charac.collisions.onGround)
+                if (!lockInput)
                 {
-                    checkingOnAir = true;
+                    charac.Jump();
+                    charac.jumped = true;
+                    if (checkingOnAir == false && charac.collisions.onGround)
+                    {
+                        checkingOnAir = true;
+                    }
+
+                    if (!charac.collisions.onGround && isbufferedJumping == false)
+                    {
+                        checkingOnAir = false;
+                        isbufferedJumping = true;
+                    }
+
+                    if (isbufferedJumping && !charac.collisions.onGround)
+                    {
+                        timeSinceJumpInput = 0f;
+
+                    }
                 }
 
-                if (!charac.collisions.onGround && isbufferedJumping == false)
-                {
-                    checkingOnAir = false;
-                    isbufferedJumping = true;
-                }
 
-                if (isbufferedJumping && !charac.collisions.onGround)
-                {
-                    timeSinceJumpInput = 0f;
-
-                }
 
             }
-         
+
 
         }
-        
+
 
         if ((Input.GetKeyDown("joystick button 0") || Input.GetKeyDown("space")) && talkingToNPC == true && isAlreadyTalking == false)
         {
@@ -157,7 +159,7 @@ public class ALR_PlayerInputHandler : MonoBehaviour
             charac.interactionNPC1.SetActive(false);
             mInput.TimeStop(true);
             dTrigger.TriggerDialogue();
-            if(dTrigger.nbNPC == 2)
+            if (dTrigger.nbNPC == 2)
             {
                 switchDisable = false;
             }
@@ -184,15 +186,15 @@ public class ALR_PlayerInputHandler : MonoBehaviour
         }
 
 
-            if ((Input.GetKeyUp("joystick button 0") || Input.GetKeyUp("space"))) 
+        if ((Input.GetKeyUp("joystick button 0") || Input.GetKeyUp("space")))
         {
             //Debug.Log("STOP JUMP ! ");
             charac.EndJump();
-         }
+        }
 
         // POUR LE SWITCH DE MONDE
 
-        //World Switch = Right Bumper
+        //World Switch = Right Bumper or Left Bumper
         if ((Input.GetButtonDown("World Switch") || (Input.GetKeyDown("left shift"))) && switchDisable == false)
         {
             pStatus.ChangeWorld();
@@ -204,7 +206,8 @@ public class ALR_PlayerInputHandler : MonoBehaviour
             {
                 isPauseMenu = true;
                 mInput.ActivatePause();
-            } else
+            }
+            else
             {
                 isPauseMenu = false;
                 mInput.DeactivatePause();
@@ -220,10 +223,8 @@ public class ALR_PlayerInputHandler : MonoBehaviour
 
         if (Input.GetKeyDown("u"))
         {
-            dCheckPoints.PastCheckPoint();
+            dCheckPoints.PreviousCheckPoint();
         }
-
-
 
         // Charger l'écran des scores ou high score ==> DEBUG
 

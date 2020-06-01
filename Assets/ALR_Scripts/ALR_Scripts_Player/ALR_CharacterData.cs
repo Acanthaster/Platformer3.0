@@ -11,7 +11,7 @@ public class ALR_CharacterData : MonoBehaviour
     public float maxSpeed;
     public float accelerationTime;
     public float decelerationTime;
-
+    public float lockInputTime;
     [Header("Jumping")]
     public float maxJumpHeight;
     public float minJumpHeight;

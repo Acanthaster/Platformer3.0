@@ -7,11 +7,16 @@ public class AXD_PlayerStatus : MonoBehaviour
     private Animator anim;
     private BoxCollider2D myCollider;
     public Camera mainCamera;
+    public ALR_CharacterData cData;
+    public ALR_PlayerInputHandler pInput;
+    public ALR_CustomCharacterController pController;
     float invincible;
-    float invincibilityCoolDown;
+    public float invincibilityCoolDown;
     public bool dead;
     public int deaths;
     public bool resetUI;
+    public bool lockedInput;
+
     [Header("World")]
     public bool LivingWorld;
     public Vector2 LastCheckpoint;
@@ -26,7 +31,10 @@ public class AXD_PlayerStatus : MonoBehaviour
 
     private void Awake()
     {
+        cData = GetComponent<ALR_CharacterData>();
         anim = GetComponent<Animator>();
+        pInput = GetComponent<ALR_PlayerInputHandler>();
+        pController = GetComponent<ALR_CustomCharacterController>();
         deaths = 0;
         dead = false;
         LastCheckpoint = this.transform.position;
@@ -45,6 +53,7 @@ public class AXD_PlayerStatus : MonoBehaviour
         {
             HealthPoint--;
             invincible = Time.time + invincibilityCoolDown;
+            pController.takingDamage = true;
         }
         if (HealthPoint <= 0)
         {
@@ -52,6 +61,7 @@ public class AXD_PlayerStatus : MonoBehaviour
         }
         else
         {
+            pInput.lockInput = true;
             anim.SetTrigger("damage");
         }
     }
@@ -63,7 +73,7 @@ public class AXD_PlayerStatus : MonoBehaviour
     
     public void Die()
     {
-        Debug.Log("Die");
+        lockedInput = true;
         if (!dead)
         {
             StartCoroutine("Dying");
@@ -74,7 +84,6 @@ public class AXD_PlayerStatus : MonoBehaviour
     IEnumerator Dying()
     {
         anim.SetTrigger("death");
-        //anim.Play("Anim_Death");
         yield return new WaitForSeconds(1);
         StartCoroutine("Respawning");
     }
@@ -88,9 +97,9 @@ public class AXD_PlayerStatus : MonoBehaviour
         mainCamera.gameObject.transform.GetChild(0).gameObject.SetActive(true);
         HealthPoint = MaxHealthPoint;
         deaths++;
-        //anim.Play("Anim_Respawn");
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(2);
         dead = false;
+        lockedInput = false;
         resetUI = true;
     }
 }
