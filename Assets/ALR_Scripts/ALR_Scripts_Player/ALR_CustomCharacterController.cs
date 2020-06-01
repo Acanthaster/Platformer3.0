@@ -12,16 +12,16 @@ public class ALR_CustomCharacterController : MonoBehaviour
     public GameObject NPC1;
 
     // Stock temporairement les points d'origine des Raycasts.
-    protected struct RaycastOrigins 
+    protected struct RaycastOrigins
     {
 
         public Vector2 topLeft, topRight, bottomLeft, bottomRight;
     }
 
     // Stock temporairement les données de collisions utilisées pour les opérations
-    public struct CollisionInfo 
+    public struct CollisionInfo
     {
-        
+
         public bool above, below, left, right;
         public RaycastHit2D hHit, vHit;
         public int groundLayer;
@@ -33,23 +33,23 @@ public class ALR_CustomCharacterController : MonoBehaviour
         public float groundAngle; //utile ?
         public float groundDirection; //utile ?
 
-        public void Reset() 
+        public void Reset()
         {
             above = false;
             below = false;
 
-            if(!onWall) 
+            if (!onWall)
             {
                 left = false;
                 right = false;
             }
-          
+
             hHit = new RaycastHit2D();
             vHit = new RaycastHit2D();
             onGround = false;
             groundAngle = 0;
             groundDirection = 0;
-           
+
         }
     }
 
@@ -58,22 +58,22 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
     /*--------VARIABLES--------*/
 
-	//COMPOSANTS
+    //COMPOSANTS
 
     private Animator animator;
     public SpriteRenderer sprite;
     public Transform graphicsTransform;
 
-	protected BoxCollider2D myCollider;
-	protected LayerMask collisionMask;
+    protected BoxCollider2D myCollider;
+    protected LayerMask collisionMask;
     protected ALR_PhysicsConfig pConfig; //S'occupe de gérer les layers de collisions et les paramètres de base de la physique
     private ALR_CharacterData cData; // Configuration des paramètres du personnage et de ses actions
     private AXD_PlayerStatus pStatus;
     private ALR_PlayerInputHandler pInput;
     //private ALR_DialogueTrigger dTrigger;
- 
 
-        //COLLISION
+
+    //COLLISION
 
     public float raySpacing = 0.125f;
     public float skinWidth = 0.015f;
@@ -93,25 +93,29 @@ public class ALR_CustomCharacterController : MonoBehaviour
     protected Vector2 speed = Vector2.zero; // Stock la vitesse de base
     [SerializeField]
     public Vector2 externalForce = Vector2.zero; // Stock les forces ingérentes
+    public AnimationCurve knockBackCurveX;
+    public AnimationCurve knockBackCurveY;
+    public float knockBackTime;
     public bool wallJumped;
     public float ponderatedWJSpeed;
     protected float gravityScale = 1; // à set ?
     protected float minimumMoveThreshold = 0.0001f;
     protected float timeSinceFalling; //Pour tenir compte du temps pour le ghost jump
 
-    private bool isOnMovingPlatform = false; 
+    private bool isOnMovingPlatform = false;
     private bool replaceOnMovingPlatform = false;
     public bool isGhostJumping = false;
     public bool jumped = false;
-    
+
+
     public bool IgnoreFriction { get; set; } // CHECK NEEDED !!
     public bool Immobile { get; set; } // CHECK NEEDED !!
     private CollisionInfo lastSideWJ;
 
     // Sert à capter les modifications sur la vitesse de base par les forces ingérentes
-    public Vector2 TotalSpeed { get { return speed + externalForce; } } 
+    public Vector2 TotalSpeed { get { return speed + externalForce; } }
 
-	//ANIMATION
+    //ANIMATION
 
     // Animation attributes and names
     private static readonly string ANIMATION_H_SPEED = "hSpeed";
@@ -126,9 +130,10 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
     public bool FacingRight = true;
 
-   
+
     public void Start()
     {
+        knockBackTime = 0;
         wallJumped = false;
         pStatus = GetComponent<AXD_PlayerStatus>();
         animator = GetComponent<Animator>();
@@ -144,21 +149,40 @@ public class ALR_CustomCharacterController : MonoBehaviour
         CalculateSpacing();
     }
 
-   	public void FixedUpdate()
+    public void FixedUpdate()
     {
-        
 
+        if (knockBackTime > pStatus.invincibilityCoolDown)
+        {
+            pInput.lockInput = false;
+            knockBackTime = 0;
+        }
         collisions.Reset();
+        if (pInput.lockInput)
+        {
+            knockBackTime += Time.deltaTime;
+            speed = new Vector2(0, 0);
+            if (FacingRight)
+            {
+                externalForce.x = -knockBackCurveX.Evaluate(knockBackTime);
+            }
+            else
+            {
+                externalForce.x = knockBackCurveX.Evaluate(knockBackTime);
+            }
+            
+            externalForce.y = knockBackCurveY.Evaluate(knockBackTime)+pConfig.gravity;
+        }
         Move((TotalSpeed) * Time.fixedDeltaTime);
         PostMove();
         SetAnimations();
         if (wallJumped)
         {
-            if(TotalSpeed.x <= cData.wallSpeedThreshhold && TotalSpeed.x >= -cData.wallSpeedThreshhold)
+            if (TotalSpeed.x <= cData.wallSpeedThreshhold && TotalSpeed.x >= -cData.wallSpeedThreshhold)
             {
                 ponderatedWJSpeed = 0;
             }
-            if ((ponderatedWJSpeed >0 && speed.x > 0 && ponderatedWJSpeed > speed.x) || (ponderatedWJSpeed < 0 && speed.x < 0 && ponderatedWJSpeed < speed.x))
+            if ((ponderatedWJSpeed > 0 && speed.x > 0 && ponderatedWJSpeed > speed.x) || (ponderatedWJSpeed < 0 && speed.x < 0 && ponderatedWJSpeed < speed.x))
             {
                 ponderatedWJSpeed = speed.x;
             }
@@ -166,12 +190,12 @@ public class ALR_CustomCharacterController : MonoBehaviour
             {
                 if (Mathf.Sign(pInput.translation) != Mathf.Sign(ponderatedWJSpeed))
                 {
-                    ponderatedWJSpeed += pInput.translation/2;
+                    ponderatedWJSpeed += pInput.translation / 2;
                 }
             }
-            if(Mathf.Sign(ponderatedWJSpeed) != Mathf.Sign(pInput.translation))
+            if (Mathf.Sign(ponderatedWJSpeed) != Mathf.Sign(pInput.translation))
             {
-                externalForce.y += pConfig.gravity*Time.fixedDeltaTime*cData.gravityMalusOnWJOnSameSide;
+                externalForce.y += pConfig.gravity * Time.fixedDeltaTime * cData.gravityMalusOnWJOnSameSide;
             }
             externalForce.x = ponderatedWJSpeed;
         }
@@ -190,7 +214,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
             }
         }
 
-        if (collisions.onWall) 
+        if (collisions.onWall)
         {
             UpdateRaycastOrigins();
             CheckOnWall();
@@ -201,11 +225,11 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
 
 
-        //COLLISIONS
-        //On créé une "grille" de raycast sur le player (sur son collider) pour checker les collisions sur toute sa hauteur et largeur
+    //COLLISIONS
+    //On créé une "grille" de raycast sur le player (sur son collider) pour checker les collisions sur toute sa hauteur et largeur
 
-        //Pour checker les collisions à gauche et à droite sur toute la hauteur du player
-    protected void HorizCollisions (ref Vector2 deltaMove) 
+    //Pour checker les collisions à gauche et à droite sur toute la hauteur du player
+    protected void HorizCollisions(ref Vector2 deltaMove)
     {
 
         float dirX = Mathf.Sign(deltaMove.x);
@@ -213,21 +237,21 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
         // On fait un "for" pour créer chaque raycast et checker si il y a une collision à chaque fois
         //i est le nombre de raycast que l'on veut sur toute la hauteur du player (de sa BoxCollider)
-        for (int i = 0; i < horizRayCount; i++) 
+        for (int i = 0; i < horizRayCount; i++)
         {
 
             // En fonction de l'orientation, on choisit un point de départ à Gauche ou à Droite du raycast
-            Vector2 rayOrigin = dirX == -1 ? raycastOrigins.bottomLeft : raycastOrigins.bottomRight; 
-            
+            Vector2 rayOrigin = dirX == -1 ? raycastOrigins.bottomLeft : raycastOrigins.bottomRight;
+
             // On ajoute la hauteur en y du raycast pour, au final, recouvrir toute la hauteur du player
-            rayOrigin += Vector2.up * (horizRaySpacing * i); 
+            rayOrigin += Vector2.up * (horizRaySpacing * i);
 
             // On fait le raycast
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.right * dirX, rayLength, collisionMask);
             Debug.DrawRay(rayOrigin, Vector2.right * dirX * rayLength, Color.red);
-            if (hit) 
+            if (hit)
             {
-               
+
 
                 float angle = Vector2.Angle(hit.normal, Vector2.up);
                 //Debug.Log("Collider : " + hit.collider + "\nLayer : " + LayerMask.LayerToName( hit.collider.gameObject.layer));
@@ -246,7 +270,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
                         hit.collider.gameObject.GetComponent<ALR_CacaoAnim>().Collect();
                         //Destroy(hit.collider.gameObject);
                     }
-                    else if (hit.collider.CompareTag( "Checkpoint"))
+                    else if (hit.collider.CompareTag("Checkpoint"))
                     {
                         hit.collider.gameObject.GetComponent<AXD_CheckPoint>().Activate();
                         pStatus.LastCheckpoint = new Vector2(hit.collider.transform.position.x, hit.collider.gameObject.GetComponent<AXD_CheckPoint>().GetYAboveGround(myCollider));
@@ -261,13 +285,13 @@ public class ALR_CustomCharacterController : MonoBehaviour
                     {
                         pStatus.TakeDamage();
 
-                        
+
                     }
                     else
                     {
                         return;
                     }
-                        
+
 
                 }
                 else if (LayerMask.LayerToName(hit.collider.gameObject.layer).Equals("Obstacles") && !hit.collider.CompareTag("FireRain"))
@@ -275,38 +299,38 @@ public class ALR_CustomCharacterController : MonoBehaviour
                     //Debug.Log("Pas Fire rain");
                     pStatus.TakeDamage();
 
-                    
+
                 }
 
                 if (hit.collider.CompareTag("NPC"))
                     return;
 
-                if (!(i == 100000)) 
+                if (!(i == 100000))
                 {
-                  
+
                     deltaMove.x = Mathf.Min(Mathf.Abs(deltaMove.x), (hit.distance - skinWidth)) * dirX;
                     rayLength = Mathf.Min(Mathf.Abs(deltaMove.x) + skinWidth, hit.distance);
 
                     // Check s'il y a collision horizontale avec un mur 
-                    if (!collisions.onGround && angle >= 89f && !collisions.onWall) 
+                    if (!collisions.onGround && angle >= 89f && !collisions.onWall)
                     {
-                        if (CheckWall()) 
-                        { 
+                        if (CheckWall())
+                        {
                             collisions.onWall = true;
                             collisions.left = dirX < 0;
                             collisions.right = dirX > 0;
                             speed.x = 0;
                             externalForce.x = 0;
                         }
-                    } 
-                    
-                    else 
+                    }
+
+                    else
                     {
-                    collisions.left = dirX < 0;
-                    collisions.right = dirX > 0;
-                    collisions.hHit = hit;
-                    speed.x = 0;
-                    externalForce.x = 0;
+                        collisions.left = dirX < 0;
+                        collisions.right = dirX > 0;
+                        collisions.hHit = hit;
+                        speed.x = 0;
+                        externalForce.x = 0;
                     }
 
                 }
@@ -316,12 +340,12 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
 
     // La même chose mais pour checker les collisions avec le haut et le bas
-    protected void VertiCollisions (ref Vector2 deltaMove) 
+    protected void VertiCollisions(ref Vector2 deltaMove)
     {
         float dirY = Mathf.Sign(deltaMove.y);
         float rayLength = Mathf.Abs(deltaMove.y) + skinWidth;
 
-        for (int i = 0; i < vertiRayCount; i++) 
+        for (int i = 0; i < vertiRayCount; i++)
         {
             Vector2 rayOrigin = dirY == -1 ? raycastOrigins.bottomLeft : raycastOrigins.topLeft;
             rayOrigin += Vector2.right * (vertiRaySpacing * i + deltaMove.x);
@@ -329,7 +353,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.up * dirY, rayLength, collisionMask);
             Debug.DrawRay(rayOrigin, Vector2.up * dirY * rayLength, Color.yellow);
 
-            if (hit) 
+            if (hit)
             {
                 //Debug.Log("Collider Layer : " + LayerMask.LayerToName(hit.collider.gameObject.layer));
                 if (TotalSpeed.y < 0)
@@ -368,7 +392,8 @@ public class ALR_CustomCharacterController : MonoBehaviour
                         pStatus.TakeDamage();
                     }
 
-                } else if (LayerMask.LayerToName(hit.collider.gameObject.layer).Equals("Obstacles") && !hit.collider.CompareTag("FireRain"))
+                }
+                else if (LayerMask.LayerToName(hit.collider.gameObject.layer).Equals("Obstacles") && !hit.collider.CompareTag("FireRain"))
                 {
                     pStatus.TakeDamage();
 
@@ -390,7 +415,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
                     transform.position = transform.position + new Vector3(0, Mathf.Abs(dist.distance));
                     isOnMovingPlatform = true;
                     deltaMove.y = 0;
-                } 
+                }
                 else
                 {
                     deltaMove.y = (hit.distance - skinWidth) * dirY;
@@ -400,7 +425,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
                 collisions.below = dirY < 0;
                 collisions.vHit = hit;
             }
-        }        
+        }
     }
 
 
@@ -409,37 +434,37 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
     // PreMove() est appelé dans la fonction Move()
     // On effectue un ensemble d'update qui sont importantes pour Move()
-    protected virtual void PreMove (ref Vector2 deltaMove) 
+    protected virtual void PreMove(ref Vector2 deltaMove)
     {
         UpdateRaycastOrigins();
-        float xDir = Mathf.Sign(deltaMove.x); 
+        float xDir = Mathf.Sign(deltaMove.x);
         CheckGround(xDir);
         UpdateExternalForce();
-        UpdateGravity(); 
+        UpdateGravity();
     }
 
 
     // La fonction principale pour le mouvement
-    public Vector2 Move (Vector2 deltaMove) 
+    public Vector2 Move(Vector2 deltaMove)
     {
         //Juste le temps de la fonction Move(), le player change de layer pour que les raycasts n'influent pas sur la fonction Move()
         int layer = gameObject.layer;
         gameObject.layer = Physics2D.IgnoreRaycastLayer;
 
         PreMove(ref deltaMove);
-        
+
         float xDir = Mathf.Sign(deltaMove.x);
 
         // Si on a un mouvement à l'horizontal, on check les collisions
-        if(deltaMove.x != 0) 
+        if (deltaMove.x != 0)
         {
             HorizCollisions(ref deltaMove);
         }
 
 
         // Si player en contact avec un mur, on check les conditions de WallSlide
-        if (collisions.onWall && cData.canWallSlide && TotalSpeed.y <= 0) 
-        {         
+        if (collisions.onWall && cData.canWallSlide && TotalSpeed.y <= 0)
+        {
             externalForce.y = 0;
             speed.y = -cData.wallSlideSpeed;
         }
@@ -451,11 +476,15 @@ public class ALR_CustomCharacterController : MonoBehaviour
         }
 
         Debug.DrawRay(transform.position, deltaMove * 3f, Color.green);
+        if (pStatus.lockedInput)
+        {
+            speed = new Vector2(0, 0);
+        }
         transform.Translate(deltaMove);
 
-        if (collisions.vHit) 
+        if (collisions.vHit)
         {
-            if ((collisions.below && TotalSpeed.y < 0) || (collisions.above && TotalSpeed.y > 0)) 
+            if ((collisions.below && TotalSpeed.y < 0) || (collisions.above && TotalSpeed.y > 0))
             {
                 speed.y = 0;
                 externalForce.y = 0;
@@ -465,7 +494,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
             }
         }
 
-     
+
 
         // On remet le player dans son layer "Player"
         gameObject.layer = layer;
@@ -474,55 +503,55 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
 
     // Pour gérer l'ensemble des déplacement horizontaux de base
-    public void Walk(float dir) 
+    public void Walk(float dir)
     {
-        if (CanMove()) 
+        if (CanMove())
         {
             if (dir > 0 && !FacingRight)
-            FlipIt();
+                FlipIt();
             else if (dir < 0 && FacingRight)
-            FlipIt();
+                FlipIt();
 
             float acc = 0f;
             float dec = 0f;
 
             // Si cData.advancedAirControl = true (dans inspector), on peut affiner la mobilité in Air
-            if (cData.advancedAirControl && !collisions.below) 
+            if (cData.advancedAirControl && !collisions.below)
             {
                 acc = cData.airAccelerationTime;
                 dec = cData.airDecelerationTime;
-            } 
-            
-            else 
+            }
+
+            else
             {
                 acc = cData.accelerationTime;
                 dec = cData.decelerationTime;
             }
 
-            if (acc > 0) 
+            if (acc > 0)
             {
                 // Gestion de l'accélération jusqu'à la vitesse max
                 if (Mathf.Abs(speed.x) < cData.maxSpeed)
                 {
                     speed.x += dir * (1 / acc) * cData.maxSpeed * Time.fixedDeltaTime;
                     speed.x = Mathf.Min(Mathf.Abs(speed.x), cData.maxSpeed * Mathf.Abs(dir)) * Mathf.Sign(speed.x);
-                } 
-            } 
-            
-            else 
-            {       
-                speed.x = cData.maxSpeed * dir; 
+                }
+            }
+
+            else
+            {
+                speed.x = cData.maxSpeed * dir;
             }
 
             // Si on a arrêter de bouger OU qu'on change de sens 
             if (dir == 0 || Mathf.Sign(dir) != Mathf.Sign(speed.x))
             {
-                if (dec > 0) 
+                if (dec > 0)
                 {
                     speed.x = Mathf.MoveTowards(speed.x, 0, (1 / dec) * cData.maxSpeed * Time.fixedDeltaTime);
-                } 
-                
-                else 
+                }
+
+                else
                 {
                     speed.x = 0;
                 }
@@ -530,9 +559,9 @@ public class ALR_CustomCharacterController : MonoBehaviour
         }
     }
 
-    public void Jump() 
+    public void Jump()
     {
-        if(CanMove()) 
+        if (CanMove())
         {
             if (collisions.onGround || (cData.canWallJump && collisions.onWall) || isGhostJumping)
             {
@@ -542,32 +571,32 @@ public class ALR_CustomCharacterController : MonoBehaviour
                 animator.SetTrigger(ANIMATION_JUMP);
 
                 // WALL JUMP
-                if (cData.canWallJump && collisions.onWall && !collisions.below) 
+                if (cData.canWallJump && collisions.onWall && !collisions.below)
                 {
                     wallJumped = true;
                     //Debug.Log("Wall Jump");
                     if (collisions.left)
                     {
-                        ponderatedWJSpeed = cData.wallJumpSpeed*3;
+                        ponderatedWJSpeed = cData.wallJumpSpeed * 3;
                     }
                     else if (collisions.right)
                     {
-                        ponderatedWJSpeed = -cData.wallJumpSpeed*3;
+                        ponderatedWJSpeed = -cData.wallJumpSpeed * 3;
                     }
                     externalForce.x += ponderatedWJSpeed;
-                    
+
                     collisions.onWall = false;
                 }
             }
         }
     }
 
-    public void EndJump() 
+    public void EndJump()
     {
         //Je sais pas pourquoi ce calcul...
         float yMove = Mathf.Sqrt(-2 * pConfig.gravity * cData.minJumpHeight);
 
-        if (speed.y > yMove) 
+        if (speed.y > yMove)
         {
             speed.y = yMove;
         }
@@ -575,9 +604,9 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
 
     //On check si on est le GROUND et on update CollisionInfo
-    protected void CheckGround(float dir) 
+    protected void CheckGround(float dir)
     {
-        for (int i = 0; i < vertiRayCount; i++) 
+        for (int i = 0; i < vertiRayCount; i++)
         {
             Vector2 rayOrigin = dir == 1 ? raycastOrigins.bottomLeft : raycastOrigins.bottomRight;
             rayOrigin += (dir == 1 ? Vector2.right : Vector2.left) * (vertiRaySpacing * i);
@@ -586,7 +615,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.down, skinWidth * 4f, collisionMask);
             Debug.DrawRay(rayOrigin, Vector2.down * skinWidth * 4f, Color.cyan);
 
-            if (hit) 
+            if (hit)
             {
                 //Debug.Log("Check ground Collider Layer : " + LayerMask.LayerToName(hit.collider.gameObject.layer));
                 if (TotalSpeed.y < 0)
@@ -617,16 +646,16 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
                     Debug.DrawRay(rayOrigin, Vector2.down * skinWidth * 2, Color.magenta);
                     break;
-                }   
-                
-                
+                }
+
+
 
             }
         }
 
     }
 
-    protected bool CheckMovingPlatform ()
+    protected bool CheckMovingPlatform()
     {
         float totalCheck = 0f;
 
@@ -636,7 +665,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
             //Pourquoi on commence par bottomLeft ?? ça me semble plus logique de commencer par bottomRight.....
 
             Vector2 rayOrigin = raycastOrigins.bottomLeft;
-            rayOrigin +=  Vector2.right * (vertiRaySpacing * i);
+            rayOrigin += Vector2.right * (vertiRaySpacing * i);
 
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.down, skinWidth * 6f, collisionMask);
             Debug.DrawRay(rayOrigin, Vector2.down * skinWidth * 6f, Color.magenta);
@@ -650,15 +679,15 @@ public class ALR_CustomCharacterController : MonoBehaviour
         {
             //Debug.Log("JE SORS !");
             return false;
-        } 
-        
+        }
+
         else
         {
             //Debug.Log("JE RESTE !");
             return true;
         }
 
-        
+
         //return false;
 
     }
@@ -731,36 +760,36 @@ public class ALR_CustomCharacterController : MonoBehaviour
         return false;
     }
 
-    protected void CheckOnWall() 
+    protected void CheckOnWall()
     {
         float rayLength = 1f;
         float rayCount = 3f;
         float spSpacing = 0.5f;
         float totalCheck = 0f;
-   
-        for (int i = 0; i < rayCount ; i++) 
-        {
-            Vector2 rayOrigin  = raycastOrigins.bottomLeft + new Vector2(-0.25f,0);
-            rayOrigin += Vector2.up * (spSpacing * i); 
 
-            RaycastHit2D hit = Physics2D.Raycast(rayOrigin , Vector2.right, rayLength, collisionMask);
+        for (int i = 0; i < rayCount; i++)
+        {
+            Vector2 rayOrigin = raycastOrigins.bottomLeft + new Vector2(-0.25f, 0);
+            rayOrigin += Vector2.up * (spSpacing * i);
+
+            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.right, rayLength, collisionMask);
             Debug.DrawRay(rayOrigin, Vector2.right * rayLength, Color.cyan);
 
             float angle = Vector2.Angle(hit.normal, Vector2.up);
 
-            if(  hit.collider == null ) 
+            if (hit.collider == null)
             {
-                   totalCheck ++;
+                totalCheck++;
             }
         }
 
-        if(totalCheck == 3) 
+        if (totalCheck == 3)
         {
             collisions.onWall = false;
             speed.y = 0;
         }
         wallJumped = false;
-     }
+    }
 
     public void CheckAhead()
     {
@@ -772,7 +801,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, rayLenght, collisionMask);
         Debug.DrawRay(transform.position, direction * rayLenght, Color.white);
 
-        if (hit.collider!=null && hit.collider.CompareTag("NPC"))
+        if (hit.collider != null && hit.collider.CompareTag("NPC"))
         {
             pInput.talkingToNPC = true;
             pInput.dTrigger = hit.transform.gameObject.GetComponent<ALR_DialogueTrigger>();
@@ -789,7 +818,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
             interactionNPC1.SetActive(false);
         }
 
-        if(hit.collider!=null && hit.collider.CompareTag("Altar"))
+        if (hit.collider != null && hit.collider.CompareTag("Altar"))
         {
             pInput.makeOffering = true;
 
@@ -800,13 +829,13 @@ public class ALR_CustomCharacterController : MonoBehaviour
         {
             interactionAltar.SetActive(false);
         }
-        
+
 
 
     }
 
     // Calcule du nombre et de la taille des raycasts pour faire la "grille" en fonction de la BoxCollider du player 
-    void CalculateSpacing() 
+    void CalculateSpacing()
     {
         Bounds bounds = myCollider.bounds;
         bounds.Expand(skinWidth * -2);
@@ -817,49 +846,49 @@ public class ALR_CustomCharacterController : MonoBehaviour
         vertiRaySpacing = bounds.size.x / (vertiRayCount - 1);
     }
 
-    public bool CanMove() 
+    public bool CanMove()
     {
         return (!Immobile);
     }
 
-    protected void PostMove() 
+    protected void PostMove()
     {
         IgnoreFriction = false;
     }
 
 
 
-            //UPDATES
+    //UPDATES
 
-    private void UpdateGravity() 
+    private void UpdateGravity()
     {
-            float g = pConfig.gravity * gravityScale * Time.fixedDeltaTime;
+        float g = pConfig.gravity * gravityScale * Time.fixedDeltaTime;
 
-        if (speed.y > 0) 
+        if (speed.y > 0)
         {
-                speed.y += g;
-        } 
-        
-        else 
-        {
-                externalForce.y += g;
+            speed.y += g;
         }
-   
+
+        else
+        {
+            externalForce.y += g;
+        }
+
     }
 
-    private void UpdateExternalForce() 
+    private void UpdateExternalForce()
     {
-        if (IgnoreFriction) 
-                return;
+        if (IgnoreFriction)
+            return;
 
-            float friction = collisions.onGround ? pConfig.groundFriction : pConfig.airFriction;
-            externalForce = Vector2.MoveTowards(externalForce, Vector2.zero,
-            externalForce.magnitude * friction * Time.fixedDeltaTime);
+        float friction = collisions.onGround ? pConfig.groundFriction : pConfig.airFriction;
+        externalForce = Vector2.MoveTowards(externalForce, Vector2.zero,
+        externalForce.magnitude * friction * Time.fixedDeltaTime);
     }
 
 
     //Permet de déterminer les origines des raycasts
-    private void UpdateRaycastOrigins() 
+    private void UpdateRaycastOrigins()
     {
         Bounds bounds = myCollider.bounds;
         bounds.Expand(skinWidth * -2);
@@ -875,7 +904,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
 
     //VISUALS
-    private void SetAnimations() 
+    private void SetAnimations()
     {
         animator.SetFloat(ANIMATION_H_SPEED, speed.x + externalForce.x);
         animator.SetFloat(ANIMATION_V_SPEED, speed.y + externalForce.y);
@@ -885,9 +914,9 @@ public class ALR_CustomCharacterController : MonoBehaviour
         animator.SetBool(ANIMATION_H_MOVING, speed.x != 0);
     }
 
-    void FlipIt() 
+    void FlipIt()
     {
-        if(Time.timeScale != 0)
+        if (Time.timeScale != 0)
         {
             FacingRight = !FacingRight;
             sprite.flipX = !sprite.flipX;

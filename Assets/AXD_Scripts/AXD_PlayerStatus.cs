@@ -7,11 +7,15 @@ public class AXD_PlayerStatus : MonoBehaviour
     private Animator anim;
     private BoxCollider2D myCollider;
     public Camera mainCamera;
+    public ALR_CharacterData cData;
+    public ALR_PlayerInputHandler pInput;
     float invincible;
-    float invincibilityCoolDown;
+    public float invincibilityCoolDown;
     public bool dead;
     public int deaths;
     public bool resetUI;
+    public bool lockedInput;
+
     [Header("World")]
     public bool LivingWorld;
     public Vector2 LastCheckpoint;
@@ -26,7 +30,9 @@ public class AXD_PlayerStatus : MonoBehaviour
 
     private void Awake()
     {
+        cData = GetComponent<ALR_CharacterData>();
         anim = GetComponent<Animator>();
+        pInput = GetComponent<ALR_PlayerInputHandler>();    
         deaths = 0;
         dead = false;
         LastCheckpoint = this.transform.position;
@@ -45,6 +51,7 @@ public class AXD_PlayerStatus : MonoBehaviour
         {
             HealthPoint--;
             invincible = Time.time + invincibilityCoolDown;
+            
         }
         if (HealthPoint <= 0)
         {
@@ -52,6 +59,7 @@ public class AXD_PlayerStatus : MonoBehaviour
         }
         else
         {
+            pInput.lockInput = true;
             anim.SetTrigger("damage");
         }
     }
