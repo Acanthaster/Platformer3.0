@@ -121,6 +121,7 @@ MonoBehaviour:
   interactionNPC1: {fileID: 0}
   interactionAltar: {fileID: 0}
   NPC1: {fileID: 0}
+  mainCamera: {fileID: 0}
   sprite: {fileID: 3661866207179204925}
   graphicsTransform: {fileID: 3661866207179204922}
   raySpacing: 0.125
@@ -140,7 +141,7 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.9999023
+      time: 0.9980459
       value: 0.0035287887
       inSlope: -18.408293
       outSlope: -18.408293
@@ -176,6 +177,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   knockBackTime: 0
+  takingDamage: 0
   wallJumped: 0
   ponderatedWJSpeed: 0
   isGhostJumping: 0
@@ -226,6 +228,7 @@ MonoBehaviour:
   mainCamera: {fileID: 0}
   cData: {fileID: 0}
   pInput: {fileID: 0}
+  pController: {fileID: 0}
   invincibilityCoolDown: 0
   dead: 0
   deaths: 0
