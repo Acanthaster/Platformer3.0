@@ -292,7 +292,6 @@ public class ALR_CustomCharacterController : MonoBehaviour
                     {
                         pStatus.Cacao += 1;
                         hit.collider.gameObject.GetComponent<ALR_CacaoAnim>().Collect();
-                        //Destroy(hit.collider.gameObject);
                     }
                     else if (hit.collider.CompareTag("Checkpoint"))
                     {
