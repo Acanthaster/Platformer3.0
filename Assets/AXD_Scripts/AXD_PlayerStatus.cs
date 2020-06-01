@@ -73,7 +73,7 @@ public class AXD_PlayerStatus : MonoBehaviour
     
     public void Die()
     {
-        Debug.Log("Die");
+        lockedInput = true;
         if (!dead)
         {
             StartCoroutine("Dying");
@@ -84,7 +84,6 @@ public class AXD_PlayerStatus : MonoBehaviour
     IEnumerator Dying()
     {
         anim.SetTrigger("death");
-        //anim.Play("Anim_Death");
         yield return new WaitForSeconds(1);
         StartCoroutine("Respawning");
     }
@@ -98,9 +97,9 @@ public class AXD_PlayerStatus : MonoBehaviour
         mainCamera.gameObject.transform.GetChild(0).gameObject.SetActive(true);
         HealthPoint = MaxHealthPoint;
         deaths++;
-        //anim.Play("Anim_Respawn");
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(2);
         dead = false;
+        lockedInput = false;
         resetUI = true;
     }
 }

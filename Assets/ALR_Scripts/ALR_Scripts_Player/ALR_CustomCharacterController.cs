@@ -152,14 +152,25 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
     public void FixedUpdate()
     {
-
-        if (knockBackTime > pStatus.invincibilityCoolDown)
+        //Debug.Log("knockback time ? " + (knockBackTime > pStatus.invincibilityCoolDown) + " dead ? " + pStatus.dead);
+        if (pStatus.dead)
+        {
+            pInput.lockInput = true;
+        }else if (!takingDamage)
         {
             pInput.lockInput = false;
+        }
+        if (knockBackTime > pStatus.invincibilityCoolDown || pStatus.dead)
+        {
+            if (!pStatus.dead)
+            {
+                pInput.lockInput = false;
+            }
             knockBackTime = 0;
             takingDamage = false;
         }
         collisions.Reset();
+        //Debug.Log("lockInput ? "+pInput.lockInput + " // Taking damage ? "+takingDamage);
         if (pInput.lockInput && takingDamage)
         {
             knockBackTime += Time.deltaTime;
@@ -172,8 +183,13 @@ public class ALR_CustomCharacterController : MonoBehaviour
             {
                 externalForce.x = knockBackCurveX.Evaluate(knockBackTime);
             }
-            
-            externalForce.y = knockBackCurveY.Evaluate(knockBackTime)+pConfig.gravity;
+
+            externalForce.y = knockBackCurveY.Evaluate(knockBackTime) + pConfig.gravity;
+        }
+        else if (pInput.lockInput)
+        {
+            Debug.Log("Bloqué, dead ? " + pStatus.dead);
+            speed = externalForce = new Vector2(0, 0);
         }
         Move((TotalSpeed) * Time.fixedDeltaTime);
         PostMove();
@@ -620,7 +636,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
             if (hit)
             {
-                
+
                 if (TotalSpeed.y < 0)
                 {
                     jumped = wallJumped = false;
@@ -638,7 +654,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
                 else if (!hit.collider.CompareTag("NPC") && !hit.collider.CompareTag("FireRain"))
                 {
-                    Debug.Log("Hey ! Check ground Collider Layer : " + LayerMask.LayerToName(hit.collider.gameObject.layer));
+                    //Debug.Log("Check ground Collider Layer : " + LayerMask.LayerToName(hit.collider.gameObject.layer));
                     collisions.onGround = true;
                     collisions.onWall = false;
 
@@ -809,7 +825,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
             interactionNPC.SetActive(true);
             interactionNPC1.SetActive(true);
-            Debug.Log("Ola ! ");
+            //Debug.Log("Ola ! ");
         }
         else
         {
