@@ -102,6 +102,7 @@ MonoBehaviour:
   isAlreadyTalking: 0
   endingDialogue: 0
   makeOffering: 0
+  quitPauseMenu: 0
   switchDisable: 1
   lockInput: 0
 --- !u!114 &3661866206367488471
@@ -210,7 +211,7 @@ MonoBehaviour:
   canWallSlide: 1
   wallSlideSpeed: 2
   canWallJump: 1
-  wallJumpSpeed: 5
+  wallJumpSpeed: 6
   maxGhostWallJump: 0
   wallSpeedThreshhold: 0
 --- !u!114 &3661866206367488466
@@ -236,7 +237,7 @@ MonoBehaviour:
   lockedInput: 0
   LivingWorld: 0
   LastCheckpoint: {x: 0, y: 0}
-  MaxHealthPoint: 0
+  MaxHealthPoint: 1
   HealthPoint: 0
   Corn: 0
   Cacao: 0
