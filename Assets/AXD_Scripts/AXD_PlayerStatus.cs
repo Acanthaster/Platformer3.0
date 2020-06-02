@@ -42,7 +42,7 @@ public class AXD_PlayerStatus : MonoBehaviour
         invincibilityCoolDown = 1f;
         invincible = Time.deltaTime;
         LivingWorld = true;
-        HealthPoint = MaxHealthPoint = 5;
+        HealthPoint = MaxHealthPoint;
         Corn = 0;
         Cacao = 0;
     }
