@@ -219,7 +219,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   platform: {fileID: 3672171852624851625}
-  moveSpeed: 2
+  moveSpeed: 3
   currentPoint: {fileID: 0}
   points:
   - {fileID: 3672171852839497323}
