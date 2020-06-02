@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 993185673697215812}
   - component: {fileID: 7721385400071712546}
-  m_Layer: 8
+  m_Layer: 17
   m_Name: global post pro life
-  m_TagString: Untagged
+  m_TagString: PostProLife
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

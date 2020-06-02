@@ -12,6 +12,8 @@ TagManager:
   - FireRain
   - NPC
   - Altar
+  - PostProLife
+  - PostProDeath
   layers:
   - Default
   - TransparentFX

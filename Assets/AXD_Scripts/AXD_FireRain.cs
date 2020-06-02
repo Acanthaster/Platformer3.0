@@ -10,6 +10,7 @@ public class AXD_FireRain : MonoBehaviour
     SpriteRenderer display;
     public bool damaging;
     bool world;
+    private Transform fireParticules, waterParticules;
 
     private Animator anim;
     private static readonly string ANIMATION_FIRE = "FireRain";
@@ -22,6 +23,10 @@ public class AXD_FireRain : MonoBehaviour
         display = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         collider = GetComponent<BoxCollider2D>();
+        fireParticules = gameObject.transform.GetChild(0);
+        waterParticules = gameObject.transform.GetChild(1);
+        fireParticules.gameObject.SetActive(true);
+        waterParticules.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -32,6 +37,9 @@ public class AXD_FireRain : MonoBehaviour
             world = pStatus.LivingWorld;
             if (world)
             {
+                gameObject.transform.GetChild(0).gameObject.SetActive(true);
+
+                gameObject.transform.GetChild(1).gameObject.SetActive(false);
                 if (!collider.enabled)
                 {
                     collider.enabled = true;
@@ -43,6 +51,9 @@ public class AXD_FireRain : MonoBehaviour
             }
             else
             {
+                gameObject.transform.GetChild(0).gameObject.SetActive(false);
+
+                gameObject.transform.GetChild(1).gameObject.SetActive(true);
                 if (collider.enabled)
                 {
                     collider.enabled = false;

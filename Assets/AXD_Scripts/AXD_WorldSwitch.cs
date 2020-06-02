@@ -11,10 +11,12 @@ public class AXD_WorldSwitch : MonoBehaviour
     [Header("Active World")]
     //If livingWorld is true, then the player is in the world of the livings, 
     public bool CurrentWorld;
+    private Transform glowingTiles;
 
     // Start is called before the first frame update
     void Start()
     {
+        glowingTiles = transform.GetChild(0);
         mapRenderer = GetComponent<TilemapRenderer>();
         mapCollider = GetComponent<TilemapCollider2D>();
 
@@ -36,6 +38,7 @@ public class AXD_WorldSwitch : MonoBehaviour
                     CurrentWorld = true;
                     mapRenderer.enabled = !mapRenderer.enabled;
                     mapCollider.enabled = !mapCollider.enabled;
+                    glowingTiles.gameObject.SetActive(false);
                 }
 
             }
@@ -47,6 +50,7 @@ public class AXD_WorldSwitch : MonoBehaviour
                     CurrentWorld = false;
                     mapRenderer.enabled = !mapRenderer.enabled;
                     mapCollider.enabled = !mapCollider.enabled;
+                    glowingTiles.gameObject.SetActive(true);
                 }
 
             }
@@ -61,6 +65,7 @@ public class AXD_WorldSwitch : MonoBehaviour
                     CurrentWorld = false;
                     mapRenderer.enabled = !mapRenderer.enabled;
                     mapCollider.enabled = !mapCollider.enabled;
+                    glowingTiles.gameObject.SetActive(true);
                 }
 
             }
@@ -72,6 +77,7 @@ public class AXD_WorldSwitch : MonoBehaviour
                     CurrentWorld = true;
                     mapRenderer.enabled = !mapRenderer.enabled;
                     mapCollider.enabled = !mapCollider.enabled;
+                    glowingTiles.gameObject.SetActive(false);
                 }
             }
 

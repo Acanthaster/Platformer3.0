@@ -211,7 +211,7 @@ MonoBehaviour:
   canWallSlide: 1
   wallSlideSpeed: 2
   canWallJump: 1
-  wallJumpSpeed: 6
+  wallJumpSpeed: 4
   maxGhostWallJump: 0
   wallSpeedThreshhold: 0
 --- !u!114 &3661866206367488466
