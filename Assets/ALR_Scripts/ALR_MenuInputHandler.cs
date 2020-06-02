@@ -6,7 +6,14 @@ public class ALR_MenuInputHandler : MonoBehaviour
 {
     [SerializeField] private GameObject pauseMenuUI;
     [SerializeField] ALR_ButtonAction targetButton;
+    public ALR_PlayerInputHandler pInputHandler;
 
+
+    private void start()
+    {
+       
+        Debug.Log(pInputHandler);
+    }
 
     private void Update()
     {
@@ -36,8 +43,11 @@ public class ALR_MenuInputHandler : MonoBehaviour
 
     public void DeactivatePause()
     {
-        TimeStop(false);
+
+        //TimeStop(false);
         //AudioListener.pause = false;          //pour le son plus tard
+       
+        pInputHandler.quitPauseMenu = true;
         pauseMenuUI.SetActive(false);
     }
 

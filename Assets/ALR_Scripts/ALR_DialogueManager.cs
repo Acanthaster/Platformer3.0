@@ -11,6 +11,7 @@ public class ALR_DialogueManager : MonoBehaviour
     public Text dialogueText;
     private Queue<string> sentences;
     public ALR_PlayerInputHandler pInput;
+    private ALR_SoundManager soundManager;
     
 
 
@@ -18,6 +19,7 @@ public class ALR_DialogueManager : MonoBehaviour
     void Start()
     {
         sentences = new Queue<string>();
+        soundManager = GameObject.FindObjectOfType<ALR_SoundManager>();
     }
 
 
@@ -40,6 +42,8 @@ public class ALR_DialogueManager : MonoBehaviour
 
     public void DisplayNextSentence()
     {
+
+        soundManager.Whispering();
         if (sentences.Count == 0)
         {
             EndDialogue();

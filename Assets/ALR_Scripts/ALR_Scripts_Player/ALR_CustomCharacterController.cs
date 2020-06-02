@@ -72,6 +72,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
     private AXD_PlayerStatus pStatus;
     private ALR_PlayerInputHandler pInput;
     //private ALR_DialogueTrigger dTrigger;
+    private ALR_SoundManager soundManager;
 
 
     //COLLISION
@@ -142,6 +143,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
         myCollider = GetComponent<BoxCollider2D>();
         pConfig = GameObject.FindObjectOfType<ALR_PhysicsConfig>();
         pInput = GetComponent<ALR_PlayerInputHandler>();
+        soundManager = GetComponent<ALR_SoundManager>();
         pInput.lockInput = true;
         spawning = true;
     }
@@ -283,13 +285,14 @@ public class ALR_CustomCharacterController : MonoBehaviour
                 {
                     if (hit.collider.CompareTag("Corn"))
                     {
-
+                        soundManager.CollectSound("Corn");
                         pStatus.Corn += 1;
                         Destroy(hit.collider.gameObject);
 
                     }
                     else if (hit.collider.CompareTag("Cacao"))
                     {
+                        soundManager.CollectSound("Cacao");
                         pStatus.Cacao += 1;
                         hit.collider.gameObject.GetComponent<ALR_CacaoAnim>().Collect();
                     }

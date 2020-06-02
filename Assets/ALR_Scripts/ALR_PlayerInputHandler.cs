@@ -17,6 +17,7 @@ public class ALR_PlayerInputHandler : MonoBehaviour
     public AXD_ScoreManager sManager;
     private ALR_MenuInputHandler mInput;
     private ALR_DebugCheckPoints dCheckPoints;
+    private ALR_SoundManager soundManager;
 
     public float translation;
     bool checkingOnAir = false;
@@ -28,6 +29,8 @@ public class ALR_PlayerInputHandler : MonoBehaviour
     private bool dialJustEnded = false;
     public bool makeOffering = false;
     private bool isPauseMenu = false;
+    public bool quitPauseMenu = false;
+    private bool menuJustQuit = false;
     public bool switchDisable = true;
     public bool lockInput = false;
     float timeSinceJumpInput;
@@ -41,6 +44,7 @@ public class ALR_PlayerInputHandler : MonoBehaviour
         sManager = FindObjectOfType<AXD_ScoreManager>();
         mInput = FindObjectOfType<ALR_MenuInputHandler>();
         dCheckPoints = FindObjectOfType<ALR_DebugCheckPoints>();
+        soundManager = GetComponent<ALR_SoundManager>();
 
     }
 
@@ -112,12 +116,24 @@ public class ALR_PlayerInputHandler : MonoBehaviour
             endingDialogue = false;
             dialJustEnded = true;
         }
+        
+        if(quitPauseMenu == true)
+        {
+            Debug.Log("ICIIII !");
+            quitPauseMenu = false;
+            menuJustQuit = true;
+
+        }
 
         if ((Input.GetKeyDown("joystick button 0") || Input.GetKeyDown("space")) && talkingToNPC == false && makeOffering == false)
         {
             if (dialJustEnded == true)
             {
                 dialJustEnded = false;
+                mInput.TimeStop(false);
+            } else if (menuJustQuit == true)
+            {
+                menuJustQuit = false;
                 mInput.TimeStop(false);
             }
             else
@@ -198,6 +214,7 @@ public class ALR_PlayerInputHandler : MonoBehaviour
         if ((Input.GetButtonDown("World Switch") || (Input.GetKeyDown("left shift"))) && switchDisable == false)
         {
             pStatus.ChangeWorld();
+            soundManager.SwitchingWorld();
         }
 
         if (Input.GetButtonDown("Pause Menu") && isAlreadyTalking == false)
@@ -209,6 +226,7 @@ public class ALR_PlayerInputHandler : MonoBehaviour
             }
             else
             {
+                
                 isPauseMenu = false;
                 mInput.DeactivatePause();
             }
