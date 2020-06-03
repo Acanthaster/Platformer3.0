@@ -54,6 +54,7 @@ public class AXD_FireRain : MonoBehaviour
                 gameObject.transform.GetChild(0).gameObject.SetActive(false);
 
                 gameObject.transform.GetChild(1).gameObject.SetActive(true);
+                
                 if (collider.enabled)
                 {
                     collider.enabled = false;

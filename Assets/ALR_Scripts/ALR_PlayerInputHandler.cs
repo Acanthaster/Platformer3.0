@@ -207,7 +207,7 @@ public class ALR_PlayerInputHandler : MonoBehaviour
 
             var sec = AXD_TimeManager.GetSeconds();
             PlayerPrefs.SetInt("seconds", sec);
-
+            sManager.CalculateScore();
             var score = AXD_ScoreManager.GetScore();
             PlayerPrefs.SetInt("score", score);
             sManager.UpdateHighScore();
@@ -285,11 +285,10 @@ public class ALR_PlayerInputHandler : MonoBehaviour
 
             var sec = AXD_TimeManager.GetSeconds();
             PlayerPrefs.SetInt("seconds", sec);
+            sManager.CalculateScore();
 
             var score = AXD_ScoreManager.GetScore();
             PlayerPrefs.SetInt("score", score);
-
-
             SceneManager.LoadScene("Menu_Score");
         }
     }
