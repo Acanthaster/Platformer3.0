@@ -298,8 +298,15 @@ public class ALR_CustomCharacterController : MonoBehaviour
                     }
                     else if (hit.collider.CompareTag("Checkpoint"))
                     {
-                        hit.collider.gameObject.GetComponent<AXD_CheckPoint>().Activate();
-                        pStatus.LastCheckpoint = new Vector2(hit.collider.transform.position.x, hit.collider.gameObject.GetComponent<AXD_CheckPoint>().GetYAboveGround(myCollider));
+                        if (!hit.collider.gameObject.GetComponent<AXD_CheckPoint>().activated)
+                        {
+                            pStatus.TrueLastCheckPoint.GetComponent<AXD_CheckPoint>().Desactivated();
+                            pStatus.TrueLastCheckPoint = hit.collider.gameObject;
+                            hit.collider.gameObject.GetComponent<AXD_CheckPoint>().Activate();
+                            pStatus.LastCheckpoint = new Vector2(hit.collider.transform.position.x, hit.collider.gameObject.GetComponent<AXD_CheckPoint>().GetYAboveGround(myCollider));
+
+                        }
+                       
                     }
 
                     return;
@@ -402,10 +409,14 @@ public class ALR_CustomCharacterController : MonoBehaviour
                     }
                     else if (hit.collider.CompareTag("Checkpoint"))
                     {
-                        //Debug.Log("Check");
+                        if (!hit.collider.gameObject.GetComponent<AXD_CheckPoint>().activated)
+                        {
+                            pStatus.TrueLastCheckPoint.GetComponent<AXD_CheckPoint>().Desactivated();
+                            pStatus.TrueLastCheckPoint = hit.collider.gameObject;
+                            hit.collider.gameObject.GetComponent<AXD_CheckPoint>().Activate();
+                            pStatus.LastCheckpoint = new Vector2(hit.collider.transform.position.x, hit.collider.gameObject.GetComponent<AXD_CheckPoint>().GetYAboveGround(myCollider));
 
-                        hit.collider.gameObject.GetComponent<AXD_CheckPoint>().Activate();
-                        pStatus.LastCheckpoint = new Vector2(hit.collider.transform.position.x, hit.collider.gameObject.GetComponent<AXD_CheckPoint>().GetYAboveGround(myCollider));
+                        }
                     }
 
                     return;
@@ -601,6 +612,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
                 if (cData.canWallJump && collisions.onWall && !collisions.below)
                 {
                     wallJumped = true;
+                    soundManager.JumpSound();
                     //Debug.Log("Wall Jump");
                     if (collisions.left)
                     {
@@ -651,8 +663,14 @@ public class ALR_CustomCharacterController : MonoBehaviour
                 }
                 if (hit.collider.isTrigger && hit.collider.CompareTag("Checkpoint"))
                 {
-                    hit.collider.gameObject.GetComponent<AXD_CheckPoint>().Activate();
-                    pStatus.LastCheckpoint = new Vector2(hit.collider.transform.position.x, hit.collider.gameObject.GetComponent<AXD_CheckPoint>().GetYAboveGround(myCollider));
+                    if (!hit.collider.gameObject.GetComponent<AXD_CheckPoint>().activated)
+                    {
+                        pStatus.TrueLastCheckPoint.GetComponent<AXD_CheckPoint>().Desactivated();
+                        pStatus.TrueLastCheckPoint = hit.collider.gameObject;
+                        hit.collider.gameObject.GetComponent<AXD_CheckPoint>().Activate();
+                        pStatus.LastCheckpoint = new Vector2(hit.collider.transform.position.x, hit.collider.gameObject.GetComponent<AXD_CheckPoint>().GetYAboveGround(myCollider));
+
+                    }
                 }
                 else if (LayerMask.LayerToName(hit.collider.gameObject.layer).Equals("Death"))
                 {

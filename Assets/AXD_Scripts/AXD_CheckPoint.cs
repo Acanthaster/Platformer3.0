@@ -7,10 +7,12 @@ public class AXD_CheckPoint : MonoBehaviour
     private Animator anim;
     public float YGround;
     public bool activated;
+    private ALR_SoundManager soundManager;
     // Start is called before the first frame update
 
     private void Awake()
     {
+        soundManager = FindObjectOfType<ALR_SoundManager>();
         activated = false;
         anim = GetComponent<Animator>();
         RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, Mathf.Infinity, LayerMask.GetMask("TempleGround"));
@@ -24,11 +26,21 @@ public class AXD_CheckPoint : MonoBehaviour
     }
 
     public void Activate()
-    {
-        if (!activated)
-        {
+    {     
+            soundManager.CheckingSound();
             anim.Play("Anim_CheckpointOn");
-        }
+            activated = true;
+    }
+
+    public void playCheckSound()
+    {
+        soundManager.CheckingSound();
+    }
+
+    public void Desactivated()
+    {
+        Debug.Log("Desactivated");
+        activated = false;
     }
 
 }

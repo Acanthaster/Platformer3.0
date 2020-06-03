@@ -10,6 +10,7 @@ public class AXD_PlayerStatus : MonoBehaviour
     public ALR_CharacterData cData;
     public ALR_PlayerInputHandler pInput;
     public ALR_CustomCharacterController pController;
+    private ALR_SoundManager soundManager;
     float invincible;
     public float invincibilityCoolDown;
     public bool dead;
@@ -20,6 +21,7 @@ public class AXD_PlayerStatus : MonoBehaviour
     [Header("World")]
     public bool LivingWorld;
     public Vector2 LastCheckpoint;
+    public GameObject TrueLastCheckPoint;
 
     [Header("Health")]
     public int MaxHealthPoint;
@@ -35,6 +37,7 @@ public class AXD_PlayerStatus : MonoBehaviour
         anim = GetComponent<Animator>();
         pInput = GetComponent<ALR_PlayerInputHandler>();
         pController = GetComponent<ALR_CustomCharacterController>();
+        soundManager = FindObjectOfType<ALR_SoundManager>();
         deaths = 0;
         dead = false;
         LastCheckpoint = this.transform.position;
@@ -84,12 +87,14 @@ public class AXD_PlayerStatus : MonoBehaviour
     IEnumerator Dying()
     {
         anim.SetTrigger("death");
+        soundManager.deathSound();
         yield return new WaitForSeconds(1);
         StartCoroutine("Respawning");
     }
 
     IEnumerator Respawning()
     {
+        soundManager.respawnSound();
         anim.SetTrigger("respawn");
         mainCamera.gameObject.transform.GetChild(0).gameObject.SetActive(false);
         this.transform.position = LastCheckpoint;

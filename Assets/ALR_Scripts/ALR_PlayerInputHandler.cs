@@ -19,6 +19,8 @@ public class ALR_PlayerInputHandler : MonoBehaviour
     private ALR_DebugCheckPoints dCheckPoints;
     private ALR_SoundManager soundManager;
 
+    [SerializeField] ALR_FountainSound[] arrFoutainSound;
+
     public float translation;
     bool checkingOnAir = false;
     bool isbufferedJumping = false;
@@ -75,6 +77,10 @@ public class ALR_PlayerInputHandler : MonoBehaviour
 
             if (charac.collisions.onGround == true && timeSinceJumpInput <= cData.maxBufferedJump)
             {
+                if (charac.jumped == false)
+                {
+                    soundManager.JumpSound();
+                }
                 charac.Jump();
                 charac.jumped = true;
                 timeSinceJumpInput = 0f;
@@ -140,8 +146,15 @@ public class ALR_PlayerInputHandler : MonoBehaviour
             {
                 if (!lockInput)
                 {
+                    if(charac.jumped == false)
+                    {
+                        soundManager.JumpSound();
+                    }
+
                     charac.Jump();
                     charac.jumped = true;
+
+  
                     if (checkingOnAir == false && charac.collisions.onGround)
                     {
                         checkingOnAir = true;
@@ -215,6 +228,12 @@ public class ALR_PlayerInputHandler : MonoBehaviour
         {
             pStatus.ChangeWorld();
             soundManager.SwitchingWorld();
+
+            for (int i = 0; i < arrFoutainSound.Length; i++)
+            {
+                
+                arrFoutainSound[i].playFountainSound(pStatus.LivingWorld);
+            }
         }
 
         if (Input.GetButtonDown("Pause Menu") && isAlreadyTalking == false)

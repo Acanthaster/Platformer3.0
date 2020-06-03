@@ -11,6 +11,9 @@ public class ALR_SoundManager : MonoBehaviour
     [SerializeField] AudioClip[] collectClips;
     [SerializeField] AudioClip[] switchClips;
     [SerializeField] AudioClip[] whisperClips;
+    [SerializeField] AudioClip[] checkClips;
+    [SerializeField] AudioClip[] deathClips;
+    [SerializeField] AudioClip[] respawnClips;
     AudioSource audioSource;
 
     private ALR_CustomCharacterController cCharacController;
@@ -31,26 +34,24 @@ public class ALR_SoundManager : MonoBehaviour
     private void Step()
     {
         AudioClip clip = GetRandomClip(steps);
-        audioSource.volume = 0.5f;
+        audioSource.volume = 0.1f;
         audioSource.PlayOneShot(clip);
 
     }
 
-    private void JumpSound()
+    public void JumpSound()
     {
-        if(!audioSource.isPlaying)
-        {
+        
             for (int i = 0; i < jumpClips.Length; i++)
             {
-                audioSource.PlayOneShot(jumpClips[i]);
-            }
-           
-        }
-      
+            audioSource.volume = 0.1f;
+            audioSource.PlayOneShot(jumpClips[i]);
+            }   
     }
 
     private void LandingSound()
     {
+        audioSource.volume = 0.1f;
         audioSource.PlayOneShot(landingClips[0]);
       
     }
@@ -59,6 +60,7 @@ public class ALR_SoundManager : MonoBehaviour
     {
         for (int i = 0; i < slidingClips.Length; i++)
         {
+            audioSource.volume = 0.2f;
             audioSource.PlayOneShot(slidingClips[i]);
         }
 
@@ -73,10 +75,40 @@ public class ALR_SoundManager : MonoBehaviour
 
     }
 
+    public void CheckingSound()
+    {
+        if (!audioSource.isPlaying)
+        {
+            for (int i = 0; i < checkClips.Length; i++)
+            {
+                audioSource.PlayOneShot(checkClips[i]);
+            }
+        }
+    }
+
+    public void deathSound()
+    {
+        for (int i = 0; i < deathClips.Length; i++)
+        {
+            audioSource.volume = 0.2f;
+            audioSource.PlayOneShot(deathClips[i]);
+        }
+    }
+
+    public void respawnSound()
+    {
+        for (int i = 0; i < respawnClips.Length; i++)
+        {
+            audioSource.volume = 0.2f;
+            audioSource.PlayOneShot(respawnClips[i]);
+        }
+    }
+
     public void Whispering()
     {
 
         AudioClip clip = GetRandomClip(whisperClips);
+        audioSource.volume = 0.2f;
         audioSource.PlayOneShot(clip);
     }
 
@@ -85,10 +117,12 @@ public class ALR_SoundManager : MonoBehaviour
        
         if(tag == "Cacao")
         {
+            audioSource.volume = 0.1f;
             audioSource.PlayOneShot(collectClips[1]);
             audioSource.PlayOneShot(collectClips[2]);
         } else if (tag == "Corn")
         {
+            audioSource.volume = 0.1f;
             audioSource.PlayOneShot(collectClips[0]);
         }
 
