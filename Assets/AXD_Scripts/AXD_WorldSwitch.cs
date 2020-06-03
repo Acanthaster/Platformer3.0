@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class AXD_WorldSwitch : MonoBehaviour
 {
-    public AXD_PlayerStatus PlayerStatus;
+    public AXD_PlayerStatus pStatus;
     TilemapRenderer mapRenderer;
     TilemapCollider2D mapCollider;
     [Header("Active World")]
@@ -19,6 +19,14 @@ public class AXD_WorldSwitch : MonoBehaviour
         glowingTiles = transform.GetChild(0);
         mapRenderer = GetComponent<TilemapRenderer>();
         mapCollider = GetComponent<TilemapCollider2D>();
+        if (CompareTag("PostProLife"))
+        {
+            glowingTiles.gameObject.SetActive(false);
+        }
+        else if (CompareTag("PostProDeath"))
+        {
+            glowingTiles.gameObject.SetActive(true);
+        }
 
     }
 
@@ -27,10 +35,10 @@ public class AXD_WorldSwitch : MonoBehaviour
     {
 
         //If we are in the living world tilemap
-        if(gameObject.name == "LivingWorld")
+        if (gameObject.name == "LivingWorld")
         {
             //If the player is in the living world
-            if(PlayerStatus.LivingWorld)
+            if (pStatus.LivingWorld)
             {
                 if (!mapRenderer.enabled && !mapCollider.enabled)
                 {
@@ -54,10 +62,11 @@ public class AXD_WorldSwitch : MonoBehaviour
                 }
 
             }
-        }else if(gameObject.name == "DeadWorld") // If we are in the dead world tilemap
+        }
+        else if (gameObject.name == "DeadWorld") // If we are in the dead world tilemap
         {
             //If the player is in the living world
-            if (PlayerStatus.LivingWorld)
+            if (pStatus.LivingWorld)
             {
                 if (mapRenderer.enabled && mapCollider.enabled)
                 {
@@ -82,6 +91,6 @@ public class AXD_WorldSwitch : MonoBehaviour
             }
 
         }
-        
+
     }
 }

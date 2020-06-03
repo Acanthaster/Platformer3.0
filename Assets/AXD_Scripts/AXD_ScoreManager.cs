@@ -69,9 +69,13 @@ public class AXD_ScoreManager : MonoBehaviour
     public void CalculateScore()
     {
         score = GetCornScore();
+        Debug.Log("Score Corn : " + score);
         score += GetCacaoScore();
+        Debug.Log("Score Cacao : " + score);
         score += GetTimeBonusScore();
+        Debug.Log("Score Time : " + score);
         score += GetDeathMalus();
+        Debug.Log("Score Death : " + score);
     }
 
     public int GetCornScore()
@@ -88,7 +92,7 @@ public class AXD_ScoreManager : MonoBehaviour
     {
         int bonus = 0;
         int i = 0;
-        while (i < levels.Count && i != -1)
+        while (i <= levels.Count && i != -1)
         {
             if (AXD_TimeManager.GetSeconds() < levels[i])
             {
@@ -97,7 +101,7 @@ public class AXD_ScoreManager : MonoBehaviour
             }
             i++;
         }
-
+        Debug.Log("Bonus : " + bonus);
         return bonus;
     }
 
@@ -119,19 +123,11 @@ public class AXD_ScoreManager : MonoBehaviour
 
     public void UpdateHighScore()
     {
-        /*if(score > highScore)
-        {
-            highScore = score;
-            PlayerPrefs.SetInt("HighScore", highScore);
-        }*/
-
-        int myScore = pStatus.Corn * cornValue + pStatus.Cacao * cacaoValue - (pStatus.deaths * deathValue);
-
         for (int i= 0; i < 5; i++)
         {
             Debug.Log(" Before : " + arrHighScore[i]);
 
-            if(myScore >= arrHighScore[i])
+            if(score >= arrHighScore[i])
             {
                 /*savedHS = arrHighScore[i];
                 savedIndex = i;
@@ -141,7 +137,7 @@ public class AXD_ScoreManager : MonoBehaviour
                 {
                     case 0:
 
-                        PlayerPrefs.SetInt("HS_One", myScore);
+                        PlayerPrefs.SetInt("HS_One", score);
                         PlayerPrefs.SetInt("HS_Two", arrHighScore[0]);
                         PlayerPrefs.SetInt("HS_Three", arrHighScore[1]);
                         PlayerPrefs.SetInt("HS_Four", arrHighScore[2]);
@@ -157,7 +153,7 @@ public class AXD_ScoreManager : MonoBehaviour
 
                     case 1:
 
-                        PlayerPrefs.SetInt("HS_Two", myScore);
+                        PlayerPrefs.SetInt("HS_Two", score);
                         PlayerPrefs.SetInt("HS_Three", arrHighScore[1]);
                         PlayerPrefs.SetInt("HS_Four", arrHighScore[2]);
                         PlayerPrefs.SetInt("HS_Five", arrHighScore[3]);
@@ -171,7 +167,7 @@ public class AXD_ScoreManager : MonoBehaviour
 
                     case 2:
 
-                        PlayerPrefs.SetInt("HS_Three", myScore);
+                        PlayerPrefs.SetInt("HS_Three", score);
                         PlayerPrefs.SetInt("HS_Four", arrHighScore[2]);
                         PlayerPrefs.SetInt("HS_Five", arrHighScore[3]);
 
@@ -185,7 +181,7 @@ public class AXD_ScoreManager : MonoBehaviour
                     case 3:
 
 
-                        PlayerPrefs.SetInt("HS_Four", myScore);
+                        PlayerPrefs.SetInt("HS_Four", score);
                         PlayerPrefs.SetInt("HS_Five", arrHighScore[3]);
 
                         arrHighScore[0] = PlayerPrefs.GetInt("HS_One");
@@ -197,7 +193,7 @@ public class AXD_ScoreManager : MonoBehaviour
 
                     case 4:
 
-                        PlayerPrefs.SetInt("HS_Five", myScore);
+                        PlayerPrefs.SetInt("HS_Five", score);
 
                         arrHighScore[0] = PlayerPrefs.GetInt("HS_One");
                         arrHighScore[1] = PlayerPrefs.GetInt("HS_Two");

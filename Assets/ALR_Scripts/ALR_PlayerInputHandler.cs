@@ -210,7 +210,7 @@ public class ALR_PlayerInputHandler : MonoBehaviour
 
             var score = AXD_ScoreManager.GetScore();
             PlayerPrefs.SetInt("score", score);
-
+            sManager.UpdateHighScore();
             SceneManager.LoadScene("Menu_Score");
         }
 
