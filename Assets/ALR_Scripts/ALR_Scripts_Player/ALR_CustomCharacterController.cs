@@ -73,6 +73,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
     private ALR_PlayerInputHandler pInput;
     //private ALR_DialogueTrigger dTrigger;
     private ALR_SoundManager soundManager;
+    public GameObject altarEnd;
 
 
     //COLLISION
@@ -109,6 +110,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
     private bool replaceOnMovingPlatform = false;
     public bool isGhostJumping = false;
     public bool jumped = false;
+    public bool pause = false;
 
 
     public bool IgnoreFriction { get; set; } // CHECK NEEDED !!
@@ -162,16 +164,16 @@ public class ALR_CustomCharacterController : MonoBehaviour
     public void FixedUpdate()
     {
         //Debug.Log("knockback time ? " + (knockBackTime > pStatus.invincibilityCoolDown) + " dead ? " + pStatus.dead);
-        if (pStatus.dead)
+        if (pStatus.dead || pause)
         {
             pInput.lockInput = true;
         }else if (!takingDamage && !spawning)
         {
             pInput.lockInput = false;
         }
-        if (knockBackTime > pStatus.invincibilityCoolDown || pStatus.dead)
+        if ((knockBackTime > pStatus.invincibilityCoolDown || pStatus.dead) && !pause )
         {
-            if (!pStatus.dead)
+            if (!pStatus.dead && !pause)
             {
                 pInput.lockInput = false;
             }
@@ -180,22 +182,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
         }
         collisions.Reset();
         //Debug.Log("lockInput ? "+pInput.lockInput + " // Taking damage ? "+takingDamage);
-        if (pInput.lockInput && takingDamage)
-        {
-            knockBackTime += Time.deltaTime;
-            speed = new Vector2(0, 0);
-            if (FacingRight)
-            {
-                externalForce.x = -knockBackCurveX.Evaluate(knockBackTime);
-            }
-            else
-            {
-                externalForce.x = knockBackCurveX.Evaluate(knockBackTime);
-            }
-
-            externalForce.y = knockBackCurveY.Evaluate(knockBackTime) + pConfig.gravity;
-        }
-        else if (pInput.lockInput)
+        if (pInput.lockInput)
         {
             speed = externalForce = new Vector2(0, 0);
         }
@@ -851,7 +838,6 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
             interactionNPC.SetActive(true);
             interactionNPC1.SetActive(true);
-            //Debug.Log("Ola ! ");
         }
         else
         {
@@ -866,7 +852,6 @@ public class ALR_CustomCharacterController : MonoBehaviour
             pInput.makeOffering = true;
 
             interactionAltar.SetActive(true);
-            Debug.Log("GIFT !");
         }
         else
         {

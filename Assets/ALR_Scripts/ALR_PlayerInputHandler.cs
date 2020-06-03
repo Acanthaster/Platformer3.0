@@ -213,7 +213,7 @@ public class ALR_PlayerInputHandler : MonoBehaviour
             var score = AXD_ScoreManager.GetScore();
             PlayerPrefs.SetInt("score", score);
             sManager.UpdateHighScore();
-            SceneManager.LoadScene("Menu_Score");
+            StartCoroutine("Ending");
         }
 
 
@@ -303,5 +303,15 @@ public class ALR_PlayerInputHandler : MonoBehaviour
             PlayerPrefs.SetInt("score", score);
             SceneManager.LoadScene("Menu_Score");
         }
+    }
+
+    IEnumerator Ending()
+    {
+        Destroy(charac.interactionAltar);
+        charac.pause = true;
+        charac.altarEnd.GetComponent<SpriteRenderer>().enabled = false;
+        charac.altarEnd.transform.GetChild(0).gameObject.SetActive(true);
+        yield return new WaitForSeconds(15);
+        SceneManager.LoadScene("Menu_Score");
     }
 }
