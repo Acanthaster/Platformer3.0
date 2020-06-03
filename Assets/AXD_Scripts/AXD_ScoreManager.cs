@@ -28,8 +28,7 @@ public class AXD_ScoreManager : MonoBehaviour
         score = 0;
         instance = this;
 
-
-        if (!PlayerPrefs.HasKey("HS_One"))
+            if (!PlayerPrefs.HasKey("HS_One"))
         {
             Debug.Log("Yop !");
             PlayerPrefs.SetInt("HS_One", 0);
@@ -72,8 +71,8 @@ public class AXD_ScoreManager : MonoBehaviour
         Debug.Log("Score Corn : " + score);
         score += GetCacaoScore();
         Debug.Log("Score Cacao : " + score);
-        score += GetTimeBonusScore();
-        Debug.Log("Score Time : " + score);
+        /*score += GetTimeBonusScore();
+        Debug.Log("Score Time : " + score);*/
         score += GetDeathMalus();
         Debug.Log("Score Death : " + score);
     }

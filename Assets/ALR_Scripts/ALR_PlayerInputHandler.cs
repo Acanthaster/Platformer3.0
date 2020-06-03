@@ -128,6 +128,7 @@ public class ALR_PlayerInputHandler : MonoBehaviour
             Debug.Log("ICIIII !");
             quitPauseMenu = false;
             menuJustQuit = true;
+            isPauseMenu = false;
 
         }
 
@@ -141,6 +142,7 @@ public class ALR_PlayerInputHandler : MonoBehaviour
             {
                 menuJustQuit = false;
                 mInput.TimeStop(false);
+ 
             }
             else
             {
@@ -248,6 +250,7 @@ public class ALR_PlayerInputHandler : MonoBehaviour
                 
                 isPauseMenu = false;
                 mInput.DeactivatePause();
+               
             }
             //isPaused = !isPaused;
         }
@@ -269,6 +272,15 @@ public class ALR_PlayerInputHandler : MonoBehaviour
         {
             sManager.UpdateHighScore();
             SceneManager.LoadScene("Menu_HighScore");
+        }
+
+        if (Input.GetKeyDown("j"))
+        {
+            PlayerPrefs.DeleteKey("HS_One");
+            PlayerPrefs.DeleteKey("HS_Two");
+            PlayerPrefs.DeleteKey("HS_Three");
+            PlayerPrefs.DeleteKey("HS_Four");
+            PlayerPrefs.DeleteKey("HS_Five");
         }
 
         if (Input.GetKey("o"))
