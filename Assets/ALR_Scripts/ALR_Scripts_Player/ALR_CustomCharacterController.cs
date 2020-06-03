@@ -64,6 +64,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
     private Animator animator;
     public SpriteRenderer sprite;
     public Transform graphicsTransform;
+    private Transform myTransform;
 
     protected BoxCollider2D myCollider;
     protected LayerMask collisionMask;
@@ -146,6 +147,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
         pConfig = GameObject.FindObjectOfType<ALR_PhysicsConfig>();
         pInput = GetComponent<ALR_PlayerInputHandler>();
         soundManager = GetComponent<ALR_SoundManager>();
+        myTransform = GetComponent<Transform>();
         pInput.lockInput = true;
         spawning = true;
     }
@@ -214,9 +216,10 @@ public class ALR_CustomCharacterController : MonoBehaviour
         }
         if (isOnMovingPlatform)
         {
-            if (!replaceOnMovingPlatform)
+            if (!replaceOnMovingPlatform )
             {
-                //transform.position = transform.position +  new Vector3(0, 0.100f);
+                //Debug.Log("REPLACE");
+                transform.localPosition = transform.localPosition +  new Vector3(0, 1.472f - transform.localPosition.y);
                 replaceOnMovingPlatform = true;
             }
             if (!CheckMovingPlatform())
@@ -435,11 +438,18 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
                 if (hit.collider.transform.tag == "MovingPlatform" && !isOnMovingPlatform)
                 {
-                    transform.parent = hit.collider.transform;
-                    ColliderDistance2D dist = myCollider.Distance(hit.collider);
-                    transform.position = transform.position + new Vector3(0, Mathf.Abs(dist.distance));
-                    isOnMovingPlatform = true;
-                    deltaMove.y = 0;
+                    Debug.Log("Touching MovingPlatform");
+
+                    if(hit.collider.transform.position.y <= transform.position.y)
+                    {
+                        transform.parent = hit.collider.transform;
+                        ColliderDistance2D dist = myCollider.Distance(hit.collider);
+                        transform.position = transform.position + new Vector3(0, Mathf.Abs(dist.distance));
+                        isOnMovingPlatform = true;
+                        deltaMove.y = 0;
+                    }
+
+                    //externalForce.y = 0;
                 }
                 else
                 {
@@ -648,6 +658,13 @@ public class ALR_CustomCharacterController : MonoBehaviour
                 {
                     jumped = wallJumped = false;
                 }
+                if (hit.collider.CompareTag("MovingPlatform"))
+                {            
+                    /*Debug.Log("Stuck !!");
+                    Vector2 transf = transform.position;
+                    transf.y = 1.475f;
+                    myTransform.position += transf;*/
+                }
                 if (hit.collider.isTrigger && hit.collider.CompareTag("Checkpoint"))
                 {
                     if (!hit.collider.gameObject.GetComponent<AXD_CheckPoint>().activated)
@@ -687,7 +704,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
     protected bool CheckMovingPlatform()
     {
-        float totalCheck = 0f;
+        int totalCheck = 0;
 
 
         for (int i = 0; i < vertiRayCount; i++)
@@ -697,17 +714,18 @@ public class ALR_CustomCharacterController : MonoBehaviour
             Vector2 rayOrigin = raycastOrigins.bottomLeft;
             rayOrigin += Vector2.right * (vertiRaySpacing * i);
 
-            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.down, skinWidth * 6f, collisionMask);
-            Debug.DrawRay(rayOrigin, Vector2.down * skinWidth * 6f, Color.magenta);
+            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.down, 1f, collisionMask);
+            Debug.DrawRay(rayOrigin, Vector2.down * 1f, Color.magenta);
             if (hit.collider == null)
             {
                 totalCheck++;
+                Debug.Log(totalCheck + "/" + vertiRayCount);
             }
         }
 
         if (totalCheck == vertiRayCount)
         {
-            //Debug.Log("JE SORS !");
+            Debug.Log("JE SORS !");
             return false;
         }
 

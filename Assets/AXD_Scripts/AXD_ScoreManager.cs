@@ -68,13 +68,13 @@ public class AXD_ScoreManager : MonoBehaviour
     public void CalculateScore()
     {
         score = GetCornScore();
-        Debug.Log("Score Corn : " + score);
+        //Debug.Log("Score Corn : " + score);
         score += GetCacaoScore();
-        Debug.Log("Score Cacao : " + score);
+        //Debug.Log("Score Cacao : " + score);
         /*score += GetTimeBonusScore();
         Debug.Log("Score Time : " + score);*/
         score += GetDeathMalus();
-        Debug.Log("Score Death : " + score);
+        //Debug.Log("Score Death : " + score);
     }
 
     public int GetCornScore()

@@ -39,7 +39,7 @@ public class AXD_CheckPoint : MonoBehaviour
 
     public void Desactivated()
     {
-        Debug.Log("Desactivated");
+        //Debug.Log("Desactivated");
         activated = false;
     }
 

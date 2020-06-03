@@ -57,7 +57,7 @@ public class ALR_AmbianceManager : MonoBehaviour
         {
             AudioClip clip = GetRandomClip(ambianceClips);
             randVolume = UnityEngine.Random.Range(minVolume, maxVolume);
-            Debug.Log("Random Volume : " + randVolume);
+            //Debug.Log("Random Volume : " + randVolume);
             audioSource.volume = randVolume;
             audioSource.PlayOneShot(clip);
         }

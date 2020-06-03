@@ -28,7 +28,7 @@ public class ALR_DebugCheckPoints : MonoBehaviour
             mainCamera.gameObject.transform.GetChild(0).gameObject.SetActive(true);
             pointer++;
 
-            Debug.Log("NEXT !" + avatar.transform.position);
+            //Debug.Log("NEXT !" + avatar.transform.position);
         }
     }
 
@@ -42,7 +42,7 @@ public class ALR_DebugCheckPoints : MonoBehaviour
             mainCamera.gameObject.transform.GetChild(0).gameObject.SetActive(true);
             pointer--;
 
-            Debug.Log("PREVIOUS !" + avatar.transform.position);
+            //Debug.Log("PREVIOUS !" + avatar.transform.position);
         }
     }
 }

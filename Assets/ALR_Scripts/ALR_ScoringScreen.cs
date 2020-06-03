@@ -113,7 +113,7 @@ public class ALR_ScoringScreen : MonoBehaviour
         }
 
 
-        int points = cornScore + cacaoScore + (-deathScore);
+        int points = cornScore + cacaoScore + deathScore;
         scoreTotal = GameObject.Find("ScoreTotal");
         scoreTxt = scoreTotal.GetComponent<Text>();
         scoreTxt.text = points.ToString();

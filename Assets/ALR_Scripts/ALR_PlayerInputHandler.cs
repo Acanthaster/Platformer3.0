@@ -274,14 +274,14 @@ public class ALR_PlayerInputHandler : MonoBehaviour
             SceneManager.LoadScene("Menu_HighScore");
         }
 
-        if (Input.GetKeyDown("j"))
+        /*if (Input.GetKeyDown("j"))
         {
             PlayerPrefs.DeleteKey("HS_One");
             PlayerPrefs.DeleteKey("HS_Two");
             PlayerPrefs.DeleteKey("HS_Three");
             PlayerPrefs.DeleteKey("HS_Four");
             PlayerPrefs.DeleteKey("HS_Five");
-        }
+        }*/
 
         if (Input.GetKey("o"))
         {
