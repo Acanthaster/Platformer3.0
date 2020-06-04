@@ -19,7 +19,7 @@ public class ALR_VolumeSlider : MonoBehaviour
         allAudioSources = FindObjectsOfType<AudioSource>();
         allOriginalVolume = new float[allAudioSources.Length];
         //Debug.Log("Audio Sources" + allAudioSources.Length);
-        Debug.Log("Audio Sources " + allAudioSources[0] + " : Volume is : " + allAudioSources[0].volume);
+        //Debug.Log("Audio Sources " + allAudioSources[0] + " : Volume is : " + allAudioSources[0].volume);
 
 
         /*if (!PlayerPrefs.HasKey("Volume"))
@@ -27,7 +27,7 @@ public class ALR_VolumeSlider : MonoBehaviour
             PlayerPrefs.SetFloat("Volume", mySlider.value);
         }*/
         //InitValue();
-        Debug.Log(" Volume " + mySlider.value);
+        //Debug.Log(" Volume " + mySlider.value);
  
         
     }

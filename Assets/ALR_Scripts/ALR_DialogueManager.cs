@@ -69,7 +69,7 @@ public class ALR_DialogueManager : MonoBehaviour
     {
         dialogueUI.SetActive(false);
         FindObjectOfType<ALR_PlayerInputHandler>().endingDialogue = true;
-        Debug.Log("End of the Conversation");
+        //Debug.Log("End of the Conversation");
     }
 
 }

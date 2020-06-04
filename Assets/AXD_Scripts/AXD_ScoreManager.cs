@@ -30,7 +30,8 @@ public class AXD_ScoreManager : MonoBehaviour
 
             if (!PlayerPrefs.HasKey("HS_One"))
         {
-            Debug.Log("Yop !");
+            
+            //Debug.Log("Yop !");
             PlayerPrefs.SetInt("HS_One", 0);
             PlayerPrefs.SetInt("HS_Two", 0);
             PlayerPrefs.SetInt("HS_Three", 0);
@@ -100,7 +101,7 @@ public class AXD_ScoreManager : MonoBehaviour
             }
             i++;
         }
-        Debug.Log("Bonus : " + bonus);
+        //Debug.Log("Bonus : " + bonus);
         return bonus;
     }
 
@@ -124,7 +125,7 @@ public class AXD_ScoreManager : MonoBehaviour
     {
         for (int i= 0; i < 5; i++)
         {
-            Debug.Log(" Before : " + arrHighScore[i]);
+            //Debug.Log(" Before : " + arrHighScore[i]);
 
             if(score >= arrHighScore[i])
             {

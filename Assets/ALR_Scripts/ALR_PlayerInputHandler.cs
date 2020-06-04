@@ -125,7 +125,7 @@ public class ALR_PlayerInputHandler : MonoBehaviour
         
         if(quitPauseMenu == true)
         {
-            Debug.Log("ICIIII !");
+            //Debug.Log("ICIIII !");
             quitPauseMenu = false;
             menuJustQuit = true;
             isPauseMenu = false;

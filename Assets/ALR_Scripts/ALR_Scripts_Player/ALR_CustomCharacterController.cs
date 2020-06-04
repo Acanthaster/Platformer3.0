@@ -438,7 +438,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
 
                 if (hit.collider.transform.tag == "MovingPlatform" && !isOnMovingPlatform)
                 {
-                    Debug.Log("Touching MovingPlatform");
+                    //Debug.Log("Touching MovingPlatform");
 
                     if(hit.collider.transform.position.y <= transform.position.y)
                     {
@@ -610,7 +610,7 @@ public class ALR_CustomCharacterController : MonoBehaviour
                 {
                     wallJumped = true;
                     soundManager.JumpSound();
-                    //Debug.Log("Wall Jump");
+
                     if (collisions.left)
                     {
                         ponderatedWJSpeed = cData.wallJumpSpeed * 3;
@@ -719,13 +719,11 @@ public class ALR_CustomCharacterController : MonoBehaviour
             if (hit.collider == null)
             {
                 totalCheck++;
-                Debug.Log(totalCheck + "/" + vertiRayCount);
             }
         }
 
         if (totalCheck == vertiRayCount)
         {
-            Debug.Log("JE SORS !");
             return false;
         }
 

@@ -12,7 +12,7 @@ public class ALR_MenuInputHandler : MonoBehaviour
     private void start()
     {
        
-        Debug.Log(pInputHandler);
+        //Debug.Log(pInputHandler);
     }
 
     private void Update()
